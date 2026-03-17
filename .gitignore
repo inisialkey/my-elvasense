@@ -45,6 +45,7 @@ flutter_*.png
 linked_*.ds
 unlinked.ds
 unlinked_spec.ds
+lib/core/localization/generated
 
 # Android related
 **/android/**/gradle-wrapper.jar
@@ -117,3 +118,20 @@ app.*.symbols
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
+
+.metadata
+pubspec.lock
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+.vscode/templates
+
+# environment files
+.env.prd.json
+.env.stg.json
+
+# FVM Version Cache
+.fvm/
