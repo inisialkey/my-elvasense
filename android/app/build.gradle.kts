@@ -1,9 +1,19 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
+
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) {
+        file.reader(Charsets.UTF_8).use { load(it) }
+    }
+}
+val flutterVersionCode = localProperties.getProperty("flutter.versionCode")?.toInt() ?: 1
+val flutterVersionName = localProperties.getProperty("flutter.versionName") ?: "1.0"
 
 android {
     namespace = "com.kalbe.myelvasense"
@@ -20,14 +30,12 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.kalbe.myelvasense"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        minSdk = 25
+        targetSdk = 35
+        versionCode = flutterVersionCode
+        versionName = flutterVersionName
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -41,4 +49,11 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0")
+    implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
+    implementation("androidx.multidex:multidex:2.0.1")
+    implementation("com.google.firebase:firebase-analytics-ktx")
 }

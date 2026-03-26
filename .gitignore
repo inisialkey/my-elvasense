@@ -127,7 +127,7 @@ pubspec.lock
 /android/app/profile
 /android/app/release
 
-.vscode/templates
+.vscode/
 
 # environment files
 .env.prd.json

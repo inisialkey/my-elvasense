@@ -1,0 +1,69 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:myelvasense/core/core.dart';
+import 'package:myelvasense/utils/utils.dart';
+
+part 'main_cubit.freezed.dart';
+
+class MainCubit extends Cubit<MainState> {
+  MainCubit() : super(const MainStateLoading());
+
+  int _currentIndex = 0;
+  late List<DataHelper>? dataMenus;
+
+  void updateIndex(int index, DataHelper? mockMenu, {BuildContext? context}) {
+    emit(const MainStateLoading());
+    _currentIndex = index;
+    if (context != null) {
+      initMenu(context, mockMenu: mockMenu);
+    }
+    emit(MainStateSuccess(mockMenu ?? dataMenus?[_currentIndex]));
+  }
+
+  void initMenu(BuildContext context, {DataHelper? mockMenu}) {
+    dataMenus = [
+      DataHelper(
+        title: Strings.of(context)?.dashboard ?? 'Dashboard',
+        isSelected: true,
+      ),
+      DataHelper(title: Strings.of(context)?.settings ?? 'Settings'),
+      DataHelper(title: Strings.of(context)?.logout ?? 'Logout'),
+    ];
+    updateIndex(_currentIndex, mockMenu);
+  }
+
+  bool onBackPressed(
+    BuildContext context,
+    GlobalKey<ScaffoldState> scaffoldState, {
+    bool isDrawerClosed = false,
+  }) {
+    if (dataMenus == null) {
+      return false;
+    }
+    if (dataMenus?[_currentIndex].title ==
+        (Strings.of(context)?.dashboard ?? 'Dashboard')) {
+      return true;
+    } else {
+      if ((scaffoldState.currentState?.isEndDrawerOpen ?? false) ||
+          isDrawerClosed) {
+        //hide navigation drawer
+        scaffoldState.currentState?.openDrawer();
+      } else {
+        for (final menu in dataMenus!) {
+          menu.isSelected =
+              menu.title == (Strings.of(context)?.dashboard ?? 'Dashboard');
+        }
+      }
+
+      return false;
+    }
+  }
+}
+
+@freezed
+sealed class MainState with _$MainState {
+  const factory MainState.loading() = MainStateLoading;
+
+  const factory MainState.success(DataHelper? data) = MainStateSuccess;
+}

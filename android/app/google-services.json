@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "876613449631",
+    "project_id": "my-elvasense",
+    "storage_bucket": "my-elvasense.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:876613449631:android:6885058ee0fb6592dc6faa",
+        "android_client_info": {
+          "package_name": "com.kalbe.myelvasense"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeTZp0lug75gIHETTVo7ZdMfYao7FPwLE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:876613449631:android:58a16c48e9045565dc6faa",
+        "android_client_info": {
+          "package_name": "com.kalbe.myelvasense.stg"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeTZp0lug75gIHETTVo7ZdMfYao7FPwLE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
