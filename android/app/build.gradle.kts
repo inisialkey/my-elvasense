@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -17,8 +19,8 @@ val flutterVersionName = localProperties.getProperty("flutter.versionName") ?: "
 
 android {
     namespace = "com.kalbe.myelvasense"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 35
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -27,6 +29,16 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
+    }
+
+    sourceSets {
+        getByName("main") {
+            java.srcDir("src/main/kotlin")
+        }
+    }
+
+    lint {
+        disable += "InvalidPackage"
     }
 
     defaultConfig {
@@ -38,11 +50,46 @@ android {
         multiDexEnabled = true
     }
 
+    signingConfigs {
+        getByName("debug") {
+            // opsional: biarkan kosong, atau setel jika memang ingin override
+            // storeFile = file("debug.keystore")
+            // storePassword = "android"
+            // keyAlias = "androiddebugkey"
+            // keyPassword = "android"
+        }
+        create("release") {
+            storeFile = file(System.getenv("MYAPP_RELEASE_STORE_FILE") ?: "debug.keystore")
+            storePassword = System.getenv("MYAPP_RELEASE_STORE_PASSWORD") ?: "android"
+            keyAlias = System.getenv("MYAPP_RELEASE_KEY_ALIAS") ?: "androiddebugkey"
+            keyPassword = System.getenv("MYAPP_RELEASE_KEY_PASSWORD") ?: "android"
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = false
+            isShrinkResources = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+
+    flavorDimensions += "env"
+    productFlavors {
+        create("stg") {
+            dimension = "env"
+            applicationIdSuffix = ".stg"
+            resValue("string", "app_name", "My Elvasense STG")
+            signingConfig = signingConfigs.getByName("release")
+        }
+        create("prd") {
+            dimension = "env"
+            resValue("string", "app_name", "My Elvasense")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 }
@@ -53,7 +100,7 @@ flutter {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0")
-    implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
+    implementation(enforcedPlatform("com.google.firebase:firebase-bom:33.5.1"))
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("com.google.firebase:firebase-analytics-ktx")
 }
