@@ -20,7 +20,7 @@ extension StringExtension on String {
 
       showToastWidget(
         Toast(
-          bgColor: Theme.of(context).extension<LzyctColors>()!.red,
+          bgColor: Theme.of(context).extension<MyElvasenseColors>()!.red,
           icon: Icons.error,
           message: message,
           textColor: Colors.white,
@@ -47,7 +47,7 @@ extension StringExtension on String {
       // showToast(msg)
       showToastWidget(
         Toast(
-          bgColor: Theme.of(context).extension<LzyctColors>()!.green,
+          bgColor: Theme.of(context).extension<MyElvasenseColors>()!.green,
           icon: Icons.check_circle,
           message: message,
           textColor: Colors.white,
@@ -72,7 +72,7 @@ extension StringExtension on String {
 
       showToastWidget(
         Toast(
-          bgColor: Theme.of(context).extension<LzyctColors>()!.pink,
+          bgColor: Theme.of(context).extension<MyElvasenseColors>()!.pink,
           icon: Icons.info,
           message: message,
           textColor: Colors.white,

@@ -42,6 +42,7 @@ class Dimens {
   static double carousel = 167.w;
   static double newsHeight = 185.w;
   static double textField = 50.w;
+  static double logo = 80.w;
 
   static double header = 200.w;
   static double minLabel = 116.w;
@@ -52,6 +53,7 @@ class Dimens {
   static double buttonH = 40.w;
   static double imageW = 110.w;
 
-  static const double cornerRadius = 15;
+  static const double cornerRadius = 30;
+  static const double cornerRadiusForm = 12;
   static const double cornerRadiusBottomSheet = 30;
 }

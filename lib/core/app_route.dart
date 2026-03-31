@@ -9,6 +9,7 @@ import 'package:myelvasense/utils/utils.dart';
 enum Routes {
   root('/'),
   splashScreen('/splashscreen'),
+  onboarding('/onboarding'),
 
   /// Home Page
   dashboard('/dashboard'),
@@ -37,16 +38,12 @@ class AppRoute {
       GoRoute(
         path: Routes.splashScreen.path,
         name: Routes.splashScreen.name,
-        builder: (_, _) => BlocProvider(
-          create: (_) => sl<GeneralTokenCubit>()
-            ..generalToken(
-              const GeneralTokenParams(
-                clientId: String.fromEnvironment('CLIENT_ID'),
-                clientSecret: String.fromEnvironment('CLIENT_SECRET'),
-              ),
-            ),
-          child: SplashScreenPage(),
-        ),
+        builder: (_, _) => const SplashScreenPage(),
+      ),
+      GoRoute(
+        path: Routes.onboarding.path,
+        name: Routes.onboarding.name,
+        builder: (_, _) => const OnboardingPage(),
       ),
       GoRoute(
         path: Routes.root.path,
@@ -109,7 +106,8 @@ class AppRoute {
       final bool isAllowedPages =
           state.matchedLocation == Routes.login.path ||
           state.matchedLocation == Routes.register.path ||
-          state.matchedLocation == Routes.splashScreen.path;
+          state.matchedLocation == Routes.splashScreen.path ||
+          state.matchedLocation == Routes.onboarding.path;
 
       ///  Check if not login
       ///  if current page is login page we don't need to direct user

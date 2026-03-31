@@ -1,17 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myelvasense/core/core.dart';
 import 'package:myelvasense/utils/utils.dart';
 
-class SplashScreenPage extends StatelessWidget {
+class SplashScreenPage extends StatefulWidget {
+  const SplashScreenPage({super.key});
+
+  @override
+  _SplashScreenPageState createState() => _SplashScreenPageState();
+}
+
+class _SplashScreenPageState extends State<SplashScreenPage> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 2), () {
+      if (!mounted) return;
+      context.goNamed(Routes.onboarding.name);
+    });
+  }
+
   @override
   Widget build(BuildContext context) => Parent(
-    // child: BlocListener<GeneralTokenCubit, GeneralTokenState>(
-    //   //coverage:ignore-start
-    //   listener: (context, state) => {
-    //     if (state is GeneralTokenStateSuccess)
-    //       {context.goNamed(Routes.root.name)}
-    //   },
-    //coverage:ignore-end
     child: Stack(
       children: [
         Container(
@@ -28,7 +38,10 @@ class SplashScreenPage extends StatelessWidget {
         ),
 
         Center(
-          child: Image.asset(Images.icLogo, width: context.widthInPercent(55)),
+          child: Image.asset(
+            Images.icLogoSplash,
+            width: context.widthInPercent(55),
+          ),
         ),
 
         Positioned(

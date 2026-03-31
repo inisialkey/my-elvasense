@@ -37,7 +37,9 @@ class _SettingsPageState extends State<SettingsPage> with MainBoxMixin {
               value: _selectedTheme,
               prefixIcon: Icon(
                 Icons.light,
-                color: Theme.of(context).extension<LzyctColors>()!.subtitle,
+                color: Theme.of(
+                  context,
+                ).extension<MyElvasenseColors>()!.subtitle,
               ),
               items: ActiveTheme.values
                   .map(
@@ -48,7 +50,7 @@ class _SettingsPageState extends State<SettingsPage> with MainBoxMixin {
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(
                             context,
-                          ).extension<LzyctColors>()!.subtitle,
+                          ).extension<MyElvasenseColors>()!.subtitle,
                         ),
                       ),
                     ),
@@ -69,7 +71,9 @@ class _SettingsPageState extends State<SettingsPage> with MainBoxMixin {
               value: _selectedLanguage,
               prefixIcon: Icon(
                 Icons.language_outlined,
-                color: Theme.of(context).extension<LzyctColors>()!.subtitle,
+                color: Theme.of(
+                  context,
+                ).extension<MyElvasenseColors>()!.subtitle,
               ),
               items: _listLanguage
                   .map(
@@ -80,7 +84,7 @@ class _SettingsPageState extends State<SettingsPage> with MainBoxMixin {
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(
                             context,
-                          ).extension<LzyctColors>()!.subtitle,
+                          ).extension<MyElvasenseColors>()!.subtitle,
                         ),
                       ),
                     ),

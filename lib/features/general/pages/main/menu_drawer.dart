@@ -27,7 +27,7 @@ class MenuDrawer extends StatelessWidget {
           width: context.widthInPercent(100),
           height: Dimens.header,
           padding: EdgeInsets.symmetric(horizontal: Dimens.space16),
-          color: Theme.of(context).extension<LzyctColors>()!.banner,
+          color: Theme.of(context).extension<MyElvasenseColors>()!.banner,
           child: SafeArea(
             child: BlocBuilder<UserCubit, UserState>(
               builder: (_, state) => switch (state) {
@@ -53,7 +53,7 @@ class MenuDrawer extends StatelessWidget {
                                 ?.copyWith(
                                   color: Theme.of(
                                     context,
-                                  ).extension<LzyctColors>()!.subtitle,
+                                  ).extension<MyElvasenseColors>()!.subtitle,
                                 ),
                           ),
                           Text(
@@ -62,7 +62,7 @@ class MenuDrawer extends StatelessWidget {
                                 ?.copyWith(
                                   color: Theme.of(
                                     context,
-                                  ).extension<LzyctColors>()!.subtitle,
+                                  ).extension<MyElvasenseColors>()!.subtitle,
                                 ),
                           ),
                         ],

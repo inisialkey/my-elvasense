@@ -11,7 +11,7 @@ class Empty extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      Image.asset(Images.icLauncher, width: context.widthInPercent(45)),
+      Image.asset(Images.icLogo, width: context.widthInPercent(45)),
       Text(errorMessage ?? Strings.of(context)!.errorNoData),
     ],
   );

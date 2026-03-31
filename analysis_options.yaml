@@ -15,7 +15,7 @@ linter:
     prefer_const_constructors: true # Prefer const constructors where possible
     prefer_const_literals_to_create_immutables: true # Prefer const for immutable literals
     avoid_unnecessary_containers: true # Discourage unnecessary Container usage
-    always_put_control_body_on_new_line: true # Improves readability for control flow
+    always_put_control_body_on_new_line: false # Improves readability for control flow
     always_put_required_named_parameters_first: true # Improves readability for function signatures
     prefer_single_quotes: true # Consistent string quotes
     unnecessary_brace_in_string_interps: true # Remove unnecessary braces in string interpolation

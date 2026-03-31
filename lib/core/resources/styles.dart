@@ -4,11 +4,11 @@ import 'package:myelvasense/core/core.dart';
 
 /// Light theme
 ThemeData themeLight(BuildContext context) => ThemeData(
-  fontFamily: 'Poppins',
+  fontFamily: 'Inter',
   useMaterial3: true,
   primaryColor: Palette.primary,
   disabledColor: Palette.shadowDark,
-  hintColor: Palette.subText,
+  hintColor: Palette.text,
   cardColor: Palette.background,
   scaffoldBackgroundColor: Palette.background,
   colorScheme: const ColorScheme.light().copyWith(
@@ -99,13 +99,14 @@ ThemeData themeLight(BuildContext context) => ThemeData(
   iconTheme: const IconThemeData(color: Palette.icon),
   visualDensity: VisualDensity.adaptivePlatformDensity,
   extensions: const <ThemeExtension<dynamic>>[
-    LzyctColors(
+    MyElvasenseColors(
       background: Palette.background,
-      banner: Palette.bannerDark,
+      banner: Palette.banner,
       card: Palette.card,
       buttonText: Palette.text,
-      subtitle: Palette.textDark,
-      shadow: Palette.shadowDark,
+      subtitle: Palette.subtitleLight,
+      shadow: Palette.shadow,
+      textOnGradient: Palette.textOnGradient,
       green: Palette.greenLatte,
       roseWater: Palette.roseWaterLatte,
       flamingo: Palette.flamingoLatte,
@@ -126,11 +127,11 @@ ThemeData themeLight(BuildContext context) => ThemeData(
 
 /// Dark theme
 ThemeData themeDark(BuildContext context) => ThemeData(
-  fontFamily: 'Poppins',
+  fontFamily: 'Inter',
   useMaterial3: true,
   primaryColor: Palette.primary,
   disabledColor: Palette.shadowDark,
-  hintColor: Palette.subTextDark,
+  hintColor: Palette.textDark,
   cardColor: Palette.backgroundDark,
   scaffoldBackgroundColor: Palette.backgroundDark,
   colorScheme: const ColorScheme.dark().copyWith(primary: Palette.primary),
@@ -219,13 +220,14 @@ ThemeData themeDark(BuildContext context) => ThemeData(
   iconTheme: const IconThemeData(color: Palette.iconDark),
   visualDensity: VisualDensity.adaptivePlatformDensity,
   extensions: const <ThemeExtension<dynamic>>[
-    LzyctColors(
+    MyElvasenseColors(
       background: Palette.backgroundDark,
-      banner: Palette.background,
+      banner: Palette.bannerDark,
       buttonText: Palette.textDark,
       card: Palette.cardDark,
-      subtitle: Palette.text,
+      subtitle: Palette.subtitleDark,
       shadow: Palette.shadowDark,
+      textOnGradient: Palette.textOnGradient,
       green: Palette.greenMocha,
       roseWater: Palette.roseWaterMocha,
       flamingo: Palette.flamingoMocha,
@@ -244,7 +246,7 @@ ThemeData themeDark(BuildContext context) => ThemeData(
   ],
 );
 
-class LzyctColors extends ThemeExtension<LzyctColors> {
+class MyElvasenseColors extends ThemeExtension<MyElvasenseColors> {
   final Color? background;
   final Color? banner;
   final Color? card;
@@ -265,8 +267,9 @@ class LzyctColors extends ThemeExtension<LzyctColors> {
   final Color? blue;
   final Color? lavender;
   final Color? red;
+  final Color? textOnGradient;
 
-  const LzyctColors({
+  const MyElvasenseColors({
     this.background,
     this.banner,
     this.card,
@@ -287,10 +290,11 @@ class LzyctColors extends ThemeExtension<LzyctColors> {
     this.blue,
     this.lavender,
     this.red,
+    this.textOnGradient,
   });
 
   @override
-  ThemeExtension<LzyctColors> copyWith({
+  ThemeExtension<MyElvasenseColors> copyWith({
     Color? background,
     Color? banner,
     Color? card,
@@ -311,7 +315,8 @@ class LzyctColors extends ThemeExtension<LzyctColors> {
     Color? blue,
     Color? lavender,
     Color? red,
-  }) => LzyctColors(
+    Color? textOnGradient,
+  }) => MyElvasenseColors(
     background: background ?? this.background,
     banner: banner ?? this.banner,
     card: card ?? this.card,
@@ -332,17 +337,18 @@ class LzyctColors extends ThemeExtension<LzyctColors> {
     blue: blue ?? this.blue,
     lavender: lavender ?? this.lavender,
     red: red ?? this.red,
+    textOnGradient: textOnGradient ?? this.textOnGradient,
   );
 
   @override
-  ThemeExtension<LzyctColors> lerp(
-    covariant ThemeExtension<LzyctColors>? other,
+  ThemeExtension<MyElvasenseColors> lerp(
+    covariant ThemeExtension<MyElvasenseColors>? other,
     double t,
   ) {
-    if (other is! LzyctColors) {
+    if (other is! MyElvasenseColors) {
       return this;
     }
-    return LzyctColors(
+    return MyElvasenseColors(
       banner: Color.lerp(banner, other.banner, t),
       background: Color.lerp(background, other.background, t),
       card: Color.lerp(card, other.card, t),
@@ -363,6 +369,7 @@ class LzyctColors extends ThemeExtension<LzyctColors> {
       lavender: Color.lerp(lavender, other.lavender, t),
       sky: Color.lerp(sky, other.sky, t),
       red: Color.lerp(red, other.red, t),
+      textOnGradient: Color.lerp(textOnGradient, other.textOnGradient, t),
     );
   }
 }
@@ -393,7 +400,7 @@ class BoxShadows {
   BoxShadow get button => BoxShadow(
     color: Theme.of(
       context,
-    ).extension<LzyctColors>()!.shadow!.withValues(alpha: 0.5),
+    ).extension<MyElvasenseColors>()!.shadow!.withValues(alpha: 0.5),
     blurRadius: 16.0,
     spreadRadius: 1.0,
   );
@@ -401,25 +408,25 @@ class BoxShadows {
   BoxShadow get card => BoxShadow(
     color: Theme.of(
       context,
-    ).extension<LzyctColors>()!.shadow!.withValues(alpha: 0.5),
+    ).extension<MyElvasenseColors>()!.shadow!.withValues(alpha: 0.5),
     blurRadius: 5.0,
     spreadRadius: 0.5,
   );
 
   BoxShadow get dialog => BoxShadow(
-    color: Theme.of(context).extension<LzyctColors>()!.shadow!,
+    color: Theme.of(context).extension<MyElvasenseColors>()!.shadow!,
     offset: const Offset(0, -4),
     blurRadius: 16.0,
   );
 
   BoxShadow get dialogAlt => BoxShadow(
-    color: Theme.of(context).extension<LzyctColors>()!.shadow!,
+    color: Theme.of(context).extension<MyElvasenseColors>()!.shadow!,
     offset: const Offset(0, 4),
     blurRadius: 16.0,
   );
 
   BoxShadow get buttonMenu => BoxShadow(
-    color: Theme.of(context).extension<LzyctColors>()!.shadow!,
+    color: Theme.of(context).extension<MyElvasenseColors>()!.shadow!,
     blurRadius: 4.0,
   );
 }

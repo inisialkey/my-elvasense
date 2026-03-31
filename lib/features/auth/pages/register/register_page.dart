@@ -58,12 +58,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  Theme.of(context).brightness == Brightness.dark
-                      ? Images.icLauncherDark
-                      : Images.icLauncher,
-                  width: context.widthInPercent(70),
-                ),
+                Image.asset(Images.icLogo, width: context.widthInPercent(70)),
                 _registerForm(),
               ],
             ),
@@ -87,7 +82,6 @@ class _RegisterPageState extends State<RegisterPage> {
             color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
           hint: 'Mudassir',
-          label: Strings.of(context)!.name,
           isValid: _formValidator.putIfAbsent('name', () => false),
           validatorListener: (String value) {
             _formValidator['name'] = value.isNotEmpty;
@@ -106,7 +100,6 @@ class _RegisterPageState extends State<RegisterPage> {
             color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
           hint: 'mudassir@lazycatlabs.com',
-          label: Strings.of(context)!.email,
           isValid: _formValidator.putIfAbsent('email', () => false),
           validatorListener: (String value) {
             _formValidator['email'] = value.isValidEmail();
@@ -126,7 +119,6 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           obscureText: !_isPasswordVisible,
           hint: '••••••••••••',
-          label: Strings.of(context)!.password,
           suffixIcon: IconButton(
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
@@ -158,7 +150,6 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           obscureText: !_isPasswordRepeatVisible,
           hint: '••••••••••••',
-          label: Strings.of(context)!.passwordRepeat,
           suffixIcon: IconButton(
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),

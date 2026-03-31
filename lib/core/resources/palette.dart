@@ -54,23 +54,39 @@ import 'package:flutter/material.dart';
 class Palette {
   Palette._();
 
-  static const Color primary = Color(0xffFF7043);
-  static const Color secondary = Color(0xff00838F);
+  static const Color primary = Color(0xff1DA1D6);
+  static const Color secondary = Color(0xffBAE6FD);
 
   static const Color background = Color(0xffffffff);
-  static const Color backgroundDark = Color(0xff000000);
-  static const Color icon = Color(0xff000000);
-  static const Color iconDark = Color(0xffffffff);
-  static const Color card = backgroundDark;
-  static const Color cardDark = background;
-  static const Color text = Color(0xff000000);
-  static const Color textDark = Color(0xffffffff);
+  static const Color backgroundDark = Color(0xff0D1B2A);
+
+  static const Color card = Color(0xffF5F7FA);
+  static const Color cardDark = Color(0xff01162F);
+
+  static const Color banner = Color(0xffFFFFFF);
+  static const Color bannerDark = Color(0xff132232);
+
+  static const Color button = Color(0xffBAE6FD);
+  static const Color buttonDark = Color(0xffF0F9FF);
+
+  static const Color form = Color(0xffE0F2FE);
+  static const Color formDark = Color(0xff012248);
+
+  static const Color icon = Color(0xff0B6FA1);
+  static const Color iconDark = Color(0xff9DDCF2);
+
+  static const Color text = Color(0xff0B6FA1);
+  static const Color textDark = Color(0xff9DDCF2);
+  static const Color textOnGradient = Color(0xffFFFFFF);
+
   static const Color subText = Color(0xff757575);
   static const Color subTextDark = Color(0xffB0BEC5);
+
   static const Color shadow = Color(0xff8c8fa1);
   static const Color shadowDark = Color(0xff7f849c);
-  static const Color banner = background;
-  static const Color bannerDark = backgroundDark;
+
+  static const Color subtitleLight = Color(0xff546E7A);
+  static const Color subtitleDark = Color(0xff90A4AE);
 
   static const Color redMocha = Color(0xfff38ba8);
   static const Color greenMocha = Color(0xffa6e3a1);

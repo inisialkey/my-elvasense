@@ -11,5 +11,6 @@ class Images {
       ? 'assets/images/ic_launcher_stg_dark.png'
       : 'assets/images/ic_launcher_dark.png';
 
+  static String icLogoSplash = 'assets/images/ic_logo_splash.png';
   static String icLogo = 'assets/images/ic_logo.png';
 }

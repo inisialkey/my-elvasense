@@ -30,7 +30,7 @@ class ButtonNotification extends StatelessWidget {
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       color: Theme.of(
                         context,
-                      ).extension<LzyctColors>()!.background,
+                      ).extension<MyElvasenseColors>()!.background,
                     ),
                     textAlign: TextAlign.center,
                   ),

@@ -5,7 +5,6 @@ import 'package:myelvasense/utils/utils.dart';
 
 class TextF extends StatefulWidget {
   const TextF({
-    required this.label,
     super.key,
     this.controller,
     this.errorMessage,
@@ -34,7 +33,6 @@ class TextF extends StatefulWidget {
 
   final TextEditingController? controller;
   final bool isValid;
-  final String label;
   final String? errorMessage;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
@@ -121,28 +119,25 @@ class TextFState extends State<TextF> {
                 height: widget.height ?? Dimens.textField,
                 decoration: BoxDecoration(
                   color: widget.enabled
-                      ? widget.backgroundColor ??
-                            Theme.of(
-                              context,
-                            ).extension<LzyctColors>()!.background
-                      : Theme.of(context).extension<LzyctColors>()!.shadow,
+                      ? Theme.of(context).brightness == Brightness.dark
+                            ? Palette.formDark
+                            : Palette.form
+                      : Theme.of(
+                          context,
+                        ).extension<MyElvasenseColors>()!.shadow,
                   border: Border.all(
                     color: _isError
-                        ? Theme.of(context).extension<LzyctColors>()!.red!
-                        : Theme.of(context).extension<LzyctColors>()!.shadow!,
+                        ? Theme.of(context).extension<MyElvasenseColors>()!.red!
+                        : Theme.of(context).brightness == Brightness.dark
+                        ? Palette.formDark
+                        : Palette.form,
                   ),
-                  borderRadius: BorderRadius.circular(Dimens.space4),
+                  borderRadius: BorderRadius.circular(Dimens.cornerRadiusForm),
                 ),
-                alignment: Alignment.topLeft,
+                alignment: Alignment.center,
                 padding: EdgeInsets.only(bottom: Dimens.space4),
               ),
-              Positioned(
-                top: Dimens.space5,
-                left: Dimens.zero,
-                right: Dimens.zero,
-                bottom: Dimens.space4,
-                child: _textFormField,
-              ),
+              Positioned.fill(child: _textFormField),
             ],
           ),
           if (widget.description != null && !_isError)
@@ -152,8 +147,10 @@ class TextFState extends State<TextF> {
                 widget.description!,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: _isError
-                      ? Theme.of(context).extension<LzyctColors>()!.red!
-                      : Theme.of(context).extension<LzyctColors>()!.shadow,
+                      ? Theme.of(context).extension<MyElvasenseColors>()!.red!
+                      : Theme.of(
+                          context,
+                        ).extension<MyElvasenseColors>()!.shadow,
                 ),
               ),
             ),
@@ -171,7 +168,7 @@ class TextFState extends State<TextF> {
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(
                             context,
-                          ).extension<LzyctColors>()!.red,
+                          ).extension<MyElvasenseColors>()!.red,
                         ),
                       ),
                     )
@@ -201,9 +198,9 @@ class TextFState extends State<TextF> {
       style: widget.textStyle ?? Theme.of(context).textTheme.bodyMedium500,
       decoration: InputDecoration(
         isDense: true,
-        contentPadding: EdgeInsets.only(
-          left: Dimens.space16,
-          top: Dimens.space4,
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: Dimens.space16,
+          vertical: Dimens.space16,
         ),
         enabledBorder: InputBorder.none,
         focusedBorder: InputBorder.none,
@@ -211,19 +208,9 @@ class TextFState extends State<TextF> {
         errorBorder: InputBorder.none,
         prefixIcon: widget.prefixIcon,
         suffixIcon: widget.suffixIcon,
-        label: widget.label.isEmpty
-            ? null
-            : Text(
-                widget.label,
-                style:
-                    widget.labelTextStyle ??
-                    Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: _isError
-                          ? Theme.of(context).extension<LzyctColors>()!.red!
-                          : Theme.of(context).extension<LzyctColors>()!.banner!,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-              ),
+        suffixIconColor: Theme.of(context).brightness == Brightness.dark
+            ? Palette.iconDark
+            : Palette.icon,
         alignLabelWithHint: true,
         hintText: widget.hint,
         floatingLabelBehavior: widget.hint != null
