@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
 
         Positioned.fill(
-          bottom: 330.w,
+          bottom: 350.w,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -100,73 +100,13 @@ class _LoginPageState extends State<LoginPage> {
                   height: Dimens.space6,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.w),
-                    color: const Color(0xffB8B9BB),
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Palette.handleBarDark
+                        : Palette.handleBarLight,
                   ),
                 ),
                 SpacerV(value: 22.w),
-                TextF(
-                  autoFillHints: const [AutofillHints.email],
-                  key: const Key('email'),
-                  focusNode: _fnEmail,
-                  textInputAction: TextInputAction.next,
-                  controller: _conEmail,
-                  keyboardType: TextInputType.emailAddress,
-                  hint: 'mudassir@lazycatlabs.com',
-                  isValid: _formValidator.putIfAbsent('email', () => false),
-                  validatorListener: (String value) {
-                    _formValidator['email'] = value.isValidEmail();
-                    context.read<ReloadFormCubit>().reload();
-                  },
-                  errorMessage: Strings.of(context)!.errorInvalidEmail,
-                ),
-                SpacerV(value: Dimens.space12),
-                TextF(
-                  autoFillHints: const [AutofillHints.password],
-                  key: const Key('password'),
-                  focusNode: _fnPassword,
-                  textInputAction: TextInputAction.done,
-                  controller: _conPassword,
-                  keyboardType: TextInputType.text,
-                  obscureText: !_isPasswordVisible,
-                  hint: 'pass123',
-                  suffixIcon: IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    onPressed: () {
-                      _isPasswordVisible = !_isPasswordVisible;
-                      context.read<ReloadFormCubit>().reload();
-                    },
-                    icon: Icon(
-                      _isPasswordVisible
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                  ),
-                  isValid: _formValidator.putIfAbsent('password', () => false),
-                  validatorListener: (String value) {
-                    _formValidator['password'] = value.length > 5;
-                    context.read<ReloadFormCubit>().reload();
-                  },
-                  errorMessage: Strings.of(context)!.errorPasswordLength,
-                ),
-                SpacerV(value: Dimens.space12),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    'Forgot password?',
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Palette.textDark
-                          : Palette.text,
-                    ),
-                  ),
-                ),
-                SpacerV(value: Dimens.space24),
-                Button(
-                  width: double.maxFinite,
-                  title: 'Log In',
-                  onPressed: () {},
-                ),
+                _loginForm(),
                 SpacerV(value: Dimens.space24),
                 Text(
                   'By continuing, you agree to our Terms of Service and \nPrivacy Policy.',
@@ -179,6 +119,81 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
           ),
+        ),
+      ],
+    ),
+  );
+
+  Widget _loginForm() => BlocBuilder<ReloadFormCubit, ReloadFormState>(
+    builder: (_, _) => Column(
+      children: [
+        TextF(
+          autoFillHints: const [AutofillHints.email],
+          key: const Key('email'),
+          focusNode: _fnEmail,
+          textInputAction: TextInputAction.next,
+          controller: _conEmail,
+          keyboardType: TextInputType.emailAddress,
+          hint: 'Email Address',
+          isValid: _formValidator.putIfAbsent('email', () => false),
+          validatorListener: (String value) {
+            _formValidator['email'] = value.isValidEmail();
+            context.read<ReloadFormCubit>().reload();
+          },
+          errorMessage: Strings.of(context)!.errorInvalidEmail,
+        ),
+        SpacerV(value: Dimens.space12),
+        TextF(
+          autoFillHints: const [AutofillHints.password],
+          key: const Key('password'),
+          focusNode: _fnPassword,
+          textInputAction: TextInputAction.done,
+          controller: _conPassword,
+          keyboardType: TextInputType.text,
+          obscureText: !_isPasswordVisible,
+          hint: 'Password',
+          suffixIcon: IconButton(
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            onPressed: () {
+              _isPasswordVisible = !_isPasswordVisible;
+              context.read<ReloadFormCubit>().reload();
+            },
+            icon: Icon(
+              _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
+            ),
+          ),
+          isValid: _formValidator.putIfAbsent('password', () => false),
+          validatorListener: (String value) {
+            _formValidator['password'] = value.length > 5;
+            context.read<ReloadFormCubit>().reload();
+          },
+          errorMessage: Strings.of(context)!.errorPasswordLength,
+        ),
+        SpacerV(value: Dimens.space12),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Text(
+            'Forgot password?',
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Palette.textDark
+                  : Palette.text,
+            ),
+          ),
+        ),
+        SpacerV(value: Dimens.space24),
+        Button(
+          width: double.maxFinite,
+          title: 'Log In',
+          onPressed: _formValidator.validate()
+              ? () => context.read<AuthCubit>().login(
+                  LoginParams(
+                    email: _conEmail.text,
+                    password: _conPassword.text,
+                  ),
+                )
+              : null,
         ),
       ],
     ),

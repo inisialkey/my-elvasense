@@ -11,6 +11,7 @@ class TextF extends StatefulWidget {
     this.isValid = false,
     this.prefixIcon,
     this.suffixIcon,
+    this.suffixIconConstraints,
     this.obscureText,
     this.keyboardType,
     this.inputFormatters,
@@ -35,6 +36,7 @@ class TextF extends StatefulWidget {
   final bool isValid;
   final String? errorMessage;
   final Widget? suffixIcon;
+  final BoxConstraints? suffixIconConstraints;
   final Widget? prefixIcon;
   final bool? obscureText;
   final bool enabled;
@@ -174,7 +176,6 @@ class TextFState extends State<TextF> {
                     )
                   : const SizedBox.shrink(),
             ),
-            const SpacerV(),
           ],
         ],
       ),
@@ -211,6 +212,7 @@ class TextFState extends State<TextF> {
         suffixIconColor: Theme.of(context).brightness == Brightness.dark
             ? Palette.iconDark
             : Palette.icon,
+        suffixIconConstraints: widget.suffixIconConstraints,
         alignLabelWithHint: true,
         hintText: widget.hint,
         floatingLabelBehavior: widget.hint != null

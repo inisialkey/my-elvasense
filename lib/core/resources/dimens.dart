@@ -53,6 +53,8 @@ class Dimens {
   static double buttonH = 40.w;
   static double imageW = 110.w;
 
+  static double bottomsheetPicker = 200.w;
+
   static const double cornerRadius = 30;
   static const double cornerRadiusForm = 12;
   static const double cornerRadiusBottomSheet = 30;

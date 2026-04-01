@@ -10,6 +10,7 @@ enum Routes {
   root('/'),
   splashScreen('/splashscreen'),
   onboarding('/onboarding'),
+  completeProfile('/complete-profile'),
 
   /// Home Page
   dashboard('/dashboard'),
@@ -44,6 +45,14 @@ class AppRoute {
         path: Routes.onboarding.path,
         name: Routes.onboarding.name,
         builder: (_, _) => const OnboardingPage(),
+      ),
+      GoRoute(
+        path: Routes.completeProfile.path,
+        name: Routes.completeProfile.name,
+        builder: (_, _) => BlocProvider(
+          create: (_) => sl<ReloadFormCubit>(),
+          child: const CompleteProfilePage(),
+        ),
       ),
       GoRoute(
         path: Routes.root.path,
@@ -107,7 +116,8 @@ class AppRoute {
           state.matchedLocation == Routes.login.path ||
           state.matchedLocation == Routes.register.path ||
           state.matchedLocation == Routes.splashScreen.path ||
-          state.matchedLocation == Routes.onboarding.path;
+          state.matchedLocation == Routes.onboarding.path ||
+          state.matchedLocation == Routes.completeProfile.path;
 
       ///  Check if not login
       ///  if current page is login page we don't need to direct user

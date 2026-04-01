@@ -82,14 +82,18 @@ class OnboardingPage extends StatelessWidget {
                   height: Dimens.space6,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.w),
-                    color: const Color(0xffB8B9BB),
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Palette.handleBarDark
+                        : Palette.handleBarLight,
                   ),
                 ),
                 SpacerV(value: 22.w),
                 Button(
                   width: double.maxFinite,
                   title: 'Join for free',
-                  onPressed: () {},
+                  onPressed: () => context.pushNamed(Routes.register.name),
+                  color: Theme.of(context).primaryColor,
+                  titleColor: Colors.white,
                 ),
                 SpacerV(value: Dimens.space12),
                 Button(

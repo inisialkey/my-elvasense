@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-
 class Parent extends StatefulWidget {
   final Widget? child;
-  final PreferredSize? appBar;
+  final PreferredSizeWidget? appBar;
   final bool avoidBottomInset;
   final Widget? floatingButton;
   final Widget? bottomNavigation;
@@ -34,18 +33,18 @@ class Parent extends StatefulWidget {
 class _ParentState extends State<Parent> {
   @override
   Widget build(BuildContext context) => GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: Scaffold(
-        key: widget.scaffoldKey,
-        backgroundColor: widget.backgroundColor,
-        resizeToAvoidBottomInset: widget.avoidBottomInset,
-        extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
-        appBar: widget.appBar,
-        body: widget.child,
-        drawer: widget.drawer,
-        endDrawer: widget.endDrawer,
-        floatingActionButton: widget.floatingButton,
-        bottomNavigationBar: widget.bottomNavigation,
-      ),
-    );
+    onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+    child: Scaffold(
+      key: widget.scaffoldKey,
+      backgroundColor: widget.backgroundColor,
+      resizeToAvoidBottomInset: widget.avoidBottomInset,
+      extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
+      appBar: widget.appBar,
+      body: widget.child,
+      drawer: widget.drawer,
+      endDrawer: widget.endDrawer,
+      floatingActionButton: widget.floatingButton,
+      bottomNavigationBar: widget.bottomNavigation,
+    ),
+  );
 }

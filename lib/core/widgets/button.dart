@@ -27,7 +27,11 @@ class Button extends StatelessWidget {
     child: TextButton(
       onPressed: onPressed,
       style: TextButton.styleFrom(
-        backgroundColor: color ?? Theme.of(context).primaryColor,
+        backgroundColor:
+            color ??
+            (Theme.of(context).brightness == Brightness.dark
+                ? Palette.buttonDark
+                : Palette.primary),
         foregroundColor: Theme.of(
           context,
         ).extension<MyElvasenseColors>()!.buttonText,
@@ -44,10 +48,14 @@ class Button extends StatelessWidget {
       ),
       child: Text(
         title,
-
-        style: Theme.of(
-          context,
-        ).textTheme.labelLarge?.copyWith(color: titleColor ?? Colors.white),
+        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+          fontWeight: FontWeight.w600,
+          color:
+              titleColor ??
+              (Theme.of(context).brightness == Brightness.dark
+                  ? Palette.text
+                  : Colors.white),
+        ),
         textAlign: TextAlign.center,
       ),
     ),
