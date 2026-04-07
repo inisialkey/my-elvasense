@@ -135,3 +135,15 @@ pubspec.lock
 
 # FVM Version Cache
 .fvm/
+
+# macOS
+.DS_Store
+
+# IntelliJ/Android Studio
+*.iml
+
+# Claude Code
+.claude/
+
+# Superpowers docs
+docs/superpowers/
