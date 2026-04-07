@@ -14,6 +14,9 @@ enum Routes {
 
   /// Home Page
   dashboard('/dashboard'),
+  device('/device'),
+  chatAi('/chat-ai'),
+  services('/services'),
   settings('/settings'),
 
   // Auth Page
@@ -78,6 +81,12 @@ class AppRoute {
           child: const RegisterPage(),
         ),
       ),
+      // Settings is outside ShellRoute — no floating navbar
+      GoRoute(
+        path: Routes.settings.path,
+        name: Routes.settings.name,
+        builder: (_, _) => const SettingsPage(),
+      ),
       ShellRoute(
         builder: (_, _, child) => BlocProvider(
           create: (context) => sl<MainCubit>(),
@@ -93,9 +102,19 @@ class AppRoute {
             ),
           ),
           GoRoute(
-            path: Routes.settings.path,
-            name: Routes.settings.name,
-            builder: (_, _) => const SettingsPage(),
+            path: Routes.device.path,
+            name: Routes.device.name,
+            builder: (_, _) => const DevicePage(),
+          ),
+          GoRoute(
+            path: Routes.chatAi.path,
+            name: Routes.chatAi.name,
+            builder: (_, _) => const ChatAiPage(),
+          ),
+          GoRoute(
+            path: Routes.services.path,
+            name: Routes.services.name,
+            builder: (_, _) => const ServicesPage(),
           ),
         ],
       ),

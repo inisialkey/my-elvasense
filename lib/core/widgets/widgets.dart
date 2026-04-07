@@ -7,6 +7,7 @@ export 'circle_image.dart';
 export 'color_loaders.dart';
 export 'drop_down.dart';
 export 'empty.dart';
+export 'floating_bottom_nav_bar.dart';
 export 'loading.dart';
 export 'my_appbar.dart';
 export 'parent.dart';

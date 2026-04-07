@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LoginResponse {
 
-@JsonKey(name: 'diagnostic') Diagnostic? get diagnostic;@JsonKey(name: 'data') DataLogin? get data;
+@JsonKey(name: 'data') DataLogin? get data;
 /// Create a copy of LoginResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $LoginResponseCopyWith<LoginResponse> get copyWith => _$LoginResponseCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginResponse&&(identical(other.diagnostic, diagnostic) || other.diagnostic == diagnostic)&&(identical(other.data, data) || other.data == data));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginResponse&&(identical(other.data, data) || other.data == data));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,diagnostic,data);
+int get hashCode => Object.hash(runtimeType,data);
 
 @override
 String toString() {
-  return 'LoginResponse(diagnostic: $diagnostic, data: $data)';
+  return 'LoginResponse(data: $data)';
 }
 
 
@@ -48,11 +48,11 @@ abstract mixin class $LoginResponseCopyWith<$Res>  {
   factory $LoginResponseCopyWith(LoginResponse value, $Res Function(LoginResponse) _then) = _$LoginResponseCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'diagnostic') Diagnostic? diagnostic,@JsonKey(name: 'data') DataLogin? data
+@JsonKey(name: 'data') DataLogin? data
 });
 
 
-$DiagnosticCopyWith<$Res>? get diagnostic;$DataLoginCopyWith<$Res>? get data;
+$DataLoginCopyWith<$Res>? get data;
 
 }
 /// @nodoc
@@ -65,26 +65,13 @@ class _$LoginResponseCopyWithImpl<$Res>
 
 /// Create a copy of LoginResponse
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? diagnostic = freezed,Object? data = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? data = freezed,}) {
   return _then(_self.copyWith(
-diagnostic: freezed == diagnostic ? _self.diagnostic : diagnostic // ignore: cast_nullable_to_non_nullable
-as Diagnostic?,data: freezed == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
+data: freezed == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
 as DataLogin?,
   ));
 }
 /// Create a copy of LoginResponse
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$DiagnosticCopyWith<$Res>? get diagnostic {
-    if (_self.diagnostic == null) {
-    return null;
-  }
-
-  return $DiagnosticCopyWith<$Res>(_self.diagnostic!, (value) {
-    return _then(_self.copyWith(diagnostic: value));
-  });
-}/// Create a copy of LoginResponse
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -175,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'diagnostic')  Diagnostic? diagnostic, @JsonKey(name: 'data')  DataLogin? data)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'data')  DataLogin? data)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LoginResponse() when $default != null:
-return $default(_that.diagnostic,_that.data);case _:
+return $default(_that.data);case _:
   return orElse();
 
 }
@@ -196,10 +183,10 @@ return $default(_that.diagnostic,_that.data);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'diagnostic')  Diagnostic? diagnostic, @JsonKey(name: 'data')  DataLogin? data)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'data')  DataLogin? data)  $default,) {final _that = this;
 switch (_that) {
 case _LoginResponse():
-return $default(_that.diagnostic,_that.data);}
+return $default(_that.data);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -213,10 +200,10 @@ return $default(_that.diagnostic,_that.data);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'diagnostic')  Diagnostic? diagnostic, @JsonKey(name: 'data')  DataLogin? data)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'data')  DataLogin? data)?  $default,) {final _that = this;
 switch (_that) {
 case _LoginResponse() when $default != null:
-return $default(_that.diagnostic,_that.data);case _:
+return $default(_that.data);case _:
   return null;
 
 }
@@ -228,10 +215,9 @@ return $default(_that.diagnostic,_that.data);case _:
 @JsonSerializable()
 
 class _LoginResponse extends LoginResponse {
-  const _LoginResponse({@JsonKey(name: 'diagnostic') this.diagnostic, @JsonKey(name: 'data') this.data}): super._();
+  const _LoginResponse({@JsonKey(name: 'data') this.data}): super._();
   factory _LoginResponse.fromJson(Map<String, dynamic> json) => _$LoginResponseFromJson(json);
 
-@override@JsonKey(name: 'diagnostic') final  Diagnostic? diagnostic;
 @override@JsonKey(name: 'data') final  DataLogin? data;
 
 /// Create a copy of LoginResponse
@@ -247,16 +233,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginResponse&&(identical(other.diagnostic, diagnostic) || other.diagnostic == diagnostic)&&(identical(other.data, data) || other.data == data));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginResponse&&(identical(other.data, data) || other.data == data));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,diagnostic,data);
+int get hashCode => Object.hash(runtimeType,data);
 
 @override
 String toString() {
-  return 'LoginResponse(diagnostic: $diagnostic, data: $data)';
+  return 'LoginResponse(data: $data)';
 }
 
 
@@ -267,11 +253,11 @@ abstract mixin class _$LoginResponseCopyWith<$Res> implements $LoginResponseCopy
   factory _$LoginResponseCopyWith(_LoginResponse value, $Res Function(_LoginResponse) _then) = __$LoginResponseCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'diagnostic') Diagnostic? diagnostic,@JsonKey(name: 'data') DataLogin? data
+@JsonKey(name: 'data') DataLogin? data
 });
 
 
-@override $DiagnosticCopyWith<$Res>? get diagnostic;@override $DataLoginCopyWith<$Res>? get data;
+@override $DataLoginCopyWith<$Res>? get data;
 
 }
 /// @nodoc
@@ -284,27 +270,14 @@ class __$LoginResponseCopyWithImpl<$Res>
 
 /// Create a copy of LoginResponse
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? diagnostic = freezed,Object? data = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? data = freezed,}) {
   return _then(_LoginResponse(
-diagnostic: freezed == diagnostic ? _self.diagnostic : diagnostic // ignore: cast_nullable_to_non_nullable
-as Diagnostic?,data: freezed == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
+data: freezed == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
 as DataLogin?,
   ));
 }
 
 /// Create a copy of LoginResponse
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$DiagnosticCopyWith<$Res>? get diagnostic {
-    if (_self.diagnostic == null) {
-    return null;
-  }
-
-  return $DiagnosticCopyWith<$Res>(_self.diagnostic!, (value) {
-    return _then(_self.copyWith(diagnostic: value));
-  });
-}/// Create a copy of LoginResponse
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -323,7 +296,7 @@ $DataLoginCopyWith<$Res>? get data {
 /// @nodoc
 mixin _$DataLogin {
 
-@JsonKey(name: 'token') String? get token;@JsonKey(name: 'tokenType') String? get tokenType;@JsonKey(name: 'refreshToken') String? get refreshToken;
+@JsonKey(name: 'access_token') String? get accessToken;@JsonKey(name: 'refresh_token') String? get refreshToken;
 /// Create a copy of DataLogin
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -336,16 +309,16 @@ $DataLoginCopyWith<DataLogin> get copyWith => _$DataLoginCopyWithImpl<DataLogin>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DataLogin&&(identical(other.token, token) || other.token == token)&&(identical(other.tokenType, tokenType) || other.tokenType == tokenType)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DataLogin&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,token,tokenType,refreshToken);
+int get hashCode => Object.hash(runtimeType,accessToken,refreshToken);
 
 @override
 String toString() {
-  return 'DataLogin(token: $token, tokenType: $tokenType, refreshToken: $refreshToken)';
+  return 'DataLogin(accessToken: $accessToken, refreshToken: $refreshToken)';
 }
 
 
@@ -356,7 +329,7 @@ abstract mixin class $DataLoginCopyWith<$Res>  {
   factory $DataLoginCopyWith(DataLogin value, $Res Function(DataLogin) _then) = _$DataLoginCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'token') String? token,@JsonKey(name: 'tokenType') String? tokenType,@JsonKey(name: 'refreshToken') String? refreshToken
+@JsonKey(name: 'access_token') String? accessToken,@JsonKey(name: 'refresh_token') String? refreshToken
 });
 
 
@@ -373,10 +346,9 @@ class _$DataLoginCopyWithImpl<$Res>
 
 /// Create a copy of DataLogin
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? token = freezed,Object? tokenType = freezed,Object? refreshToken = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? accessToken = freezed,Object? refreshToken = freezed,}) {
   return _then(_self.copyWith(
-token: freezed == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
-as String?,tokenType: freezed == tokenType ? _self.tokenType : tokenType // ignore: cast_nullable_to_non_nullable
+accessToken: freezed == accessToken ? _self.accessToken : accessToken // ignore: cast_nullable_to_non_nullable
 as String?,refreshToken: freezed == refreshToken ? _self.refreshToken : refreshToken // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -460,10 +432,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'token')  String? token, @JsonKey(name: 'tokenType')  String? tokenType, @JsonKey(name: 'refreshToken')  String? refreshToken)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'access_token')  String? accessToken, @JsonKey(name: 'refresh_token')  String? refreshToken)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DataLogin() when $default != null:
-return $default(_that.token,_that.tokenType,_that.refreshToken);case _:
+return $default(_that.accessToken,_that.refreshToken);case _:
   return orElse();
 
 }
@@ -481,10 +453,10 @@ return $default(_that.token,_that.tokenType,_that.refreshToken);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'token')  String? token, @JsonKey(name: 'tokenType')  String? tokenType, @JsonKey(name: 'refreshToken')  String? refreshToken)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'access_token')  String? accessToken, @JsonKey(name: 'refresh_token')  String? refreshToken)  $default,) {final _that = this;
 switch (_that) {
 case _DataLogin():
-return $default(_that.token,_that.tokenType,_that.refreshToken);}
+return $default(_that.accessToken,_that.refreshToken);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -498,10 +470,10 @@ return $default(_that.token,_that.tokenType,_that.refreshToken);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'token')  String? token, @JsonKey(name: 'tokenType')  String? tokenType, @JsonKey(name: 'refreshToken')  String? refreshToken)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'access_token')  String? accessToken, @JsonKey(name: 'refresh_token')  String? refreshToken)?  $default,) {final _that = this;
 switch (_that) {
 case _DataLogin() when $default != null:
-return $default(_that.token,_that.tokenType,_that.refreshToken);case _:
+return $default(_that.accessToken,_that.refreshToken);case _:
   return null;
 
 }
@@ -513,12 +485,11 @@ return $default(_that.token,_that.tokenType,_that.refreshToken);case _:
 @JsonSerializable()
 
 class _DataLogin implements DataLogin {
-  const _DataLogin({@JsonKey(name: 'token') this.token, @JsonKey(name: 'tokenType') this.tokenType, @JsonKey(name: 'refreshToken') this.refreshToken});
+  const _DataLogin({@JsonKey(name: 'access_token') this.accessToken, @JsonKey(name: 'refresh_token') this.refreshToken});
   factory _DataLogin.fromJson(Map<String, dynamic> json) => _$DataLoginFromJson(json);
 
-@override@JsonKey(name: 'token') final  String? token;
-@override@JsonKey(name: 'tokenType') final  String? tokenType;
-@override@JsonKey(name: 'refreshToken') final  String? refreshToken;
+@override@JsonKey(name: 'access_token') final  String? accessToken;
+@override@JsonKey(name: 'refresh_token') final  String? refreshToken;
 
 /// Create a copy of DataLogin
 /// with the given fields replaced by the non-null parameter values.
@@ -533,16 +504,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DataLogin&&(identical(other.token, token) || other.token == token)&&(identical(other.tokenType, tokenType) || other.tokenType == tokenType)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DataLogin&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,token,tokenType,refreshToken);
+int get hashCode => Object.hash(runtimeType,accessToken,refreshToken);
 
 @override
 String toString() {
-  return 'DataLogin(token: $token, tokenType: $tokenType, refreshToken: $refreshToken)';
+  return 'DataLogin(accessToken: $accessToken, refreshToken: $refreshToken)';
 }
 
 
@@ -553,7 +524,7 @@ abstract mixin class _$DataLoginCopyWith<$Res> implements $DataLoginCopyWith<$Re
   factory _$DataLoginCopyWith(_DataLogin value, $Res Function(_DataLogin) _then) = __$DataLoginCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'token') String? token,@JsonKey(name: 'tokenType') String? tokenType,@JsonKey(name: 'refreshToken') String? refreshToken
+@JsonKey(name: 'access_token') String? accessToken,@JsonKey(name: 'refresh_token') String? refreshToken
 });
 
 
@@ -570,10 +541,9 @@ class __$DataLoginCopyWithImpl<$Res>
 
 /// Create a copy of DataLogin
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? token = freezed,Object? tokenType = freezed,Object? refreshToken = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? accessToken = freezed,Object? refreshToken = freezed,}) {
   return _then(_DataLogin(
-token: freezed == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
-as String?,tokenType: freezed == tokenType ? _self.tokenType : tokenType // ignore: cast_nullable_to_non_nullable
+accessToken: freezed == accessToken ? _self.accessToken : accessToken // ignore: cast_nullable_to_non_nullable
 as String?,refreshToken: freezed == refreshToken ? _self.refreshToken : refreshToken // ignore: cast_nullable_to_non_nullable
 as String?,
   ));

@@ -11,6 +11,7 @@ class Parent extends StatefulWidget {
   final Color? backgroundColor;
   final Key? scaffoldKey;
   final bool extendBodyBehindAppBar;
+  final bool extendBody;
 
   const Parent({
     super.key,
@@ -24,6 +25,7 @@ class Parent extends StatefulWidget {
     this.scaffoldKey,
     this.endDrawer,
     this.extendBodyBehindAppBar = false,
+    this.extendBody = false,
   });
 
   @override
@@ -39,6 +41,7 @@ class _ParentState extends State<Parent> {
       backgroundColor: widget.backgroundColor,
       resizeToAvoidBottomInset: widget.avoidBottomInset,
       extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
+      extendBody: widget.extendBody,
       appBar: widget.appBar,
       body: widget.child,
       drawer: widget.drawer,

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LoginParams {
 
- String get email; String get password; String? get osInfo; String? get deviceInfo; String get fcmToken;
+ String get email; String get password;
 /// Create a copy of LoginParams
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $LoginParamsCopyWith<LoginParams> get copyWith => _$LoginParamsCopyWithImpl<Logi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginParams&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.osInfo, osInfo) || other.osInfo == osInfo)&&(identical(other.deviceInfo, deviceInfo) || other.deviceInfo == deviceInfo)&&(identical(other.fcmToken, fcmToken) || other.fcmToken == fcmToken));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginParams&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,email,password,osInfo,deviceInfo,fcmToken);
+int get hashCode => Object.hash(runtimeType,email,password);
 
 @override
 String toString() {
-  return 'LoginParams(email: $email, password: $password, osInfo: $osInfo, deviceInfo: $deviceInfo, fcmToken: $fcmToken)';
+  return 'LoginParams(email: $email, password: $password)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $LoginParamsCopyWith<$Res>  {
   factory $LoginParamsCopyWith(LoginParams value, $Res Function(LoginParams) _then) = _$LoginParamsCopyWithImpl;
 @useResult
 $Res call({
- String email, String password, String? osInfo, String? deviceInfo, String fcmToken
+ String email, String password
 });
 
 
@@ -65,13 +65,10 @@ class _$LoginParamsCopyWithImpl<$Res>
 
 /// Create a copy of LoginParams
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? email = null,Object? password = null,Object? osInfo = freezed,Object? deviceInfo = freezed,Object? fcmToken = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? email = null,Object? password = null,}) {
   return _then(_self.copyWith(
 email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
-as String,osInfo: freezed == osInfo ? _self.osInfo : osInfo // ignore: cast_nullable_to_non_nullable
-as String?,deviceInfo: freezed == deviceInfo ? _self.deviceInfo : deviceInfo // ignore: cast_nullable_to_non_nullable
-as String?,fcmToken: null == fcmToken ? _self.fcmToken : fcmToken // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -154,10 +151,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String email,  String password,  String? osInfo,  String? deviceInfo,  String fcmToken)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String email,  String password)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LoginParams() when $default != null:
-return $default(_that.email,_that.password,_that.osInfo,_that.deviceInfo,_that.fcmToken);case _:
+return $default(_that.email,_that.password);case _:
   return orElse();
 
 }
@@ -175,10 +172,10 @@ return $default(_that.email,_that.password,_that.osInfo,_that.deviceInfo,_that.f
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String email,  String password,  String? osInfo,  String? deviceInfo,  String fcmToken)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String email,  String password)  $default,) {final _that = this;
 switch (_that) {
 case _LoginParams():
-return $default(_that.email,_that.password,_that.osInfo,_that.deviceInfo,_that.fcmToken);}
+return $default(_that.email,_that.password);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -192,10 +189,10 @@ return $default(_that.email,_that.password,_that.osInfo,_that.deviceInfo,_that.f
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String email,  String password,  String? osInfo,  String? deviceInfo,  String fcmToken)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String email,  String password)?  $default,) {final _that = this;
 switch (_that) {
 case _LoginParams() when $default != null:
-return $default(_that.email,_that.password,_that.osInfo,_that.deviceInfo,_that.fcmToken);case _:
+return $default(_that.email,_that.password);case _:
   return null;
 
 }
@@ -207,14 +204,11 @@ return $default(_that.email,_that.password,_that.osInfo,_that.deviceInfo,_that.f
 @JsonSerializable()
 
 class _LoginParams implements LoginParams {
-  const _LoginParams({this.email = '', this.password = '', this.osInfo, this.deviceInfo, this.fcmToken = 'GeneratedFCMToken'});
+  const _LoginParams({this.email = '', this.password = ''});
   factory _LoginParams.fromJson(Map<String, dynamic> json) => _$LoginParamsFromJson(json);
 
 @override@JsonKey() final  String email;
 @override@JsonKey() final  String password;
-@override final  String? osInfo;
-@override final  String? deviceInfo;
-@override@JsonKey() final  String fcmToken;
 
 /// Create a copy of LoginParams
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +223,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginParams&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.osInfo, osInfo) || other.osInfo == osInfo)&&(identical(other.deviceInfo, deviceInfo) || other.deviceInfo == deviceInfo)&&(identical(other.fcmToken, fcmToken) || other.fcmToken == fcmToken));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginParams&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,email,password,osInfo,deviceInfo,fcmToken);
+int get hashCode => Object.hash(runtimeType,email,password);
 
 @override
 String toString() {
-  return 'LoginParams(email: $email, password: $password, osInfo: $osInfo, deviceInfo: $deviceInfo, fcmToken: $fcmToken)';
+  return 'LoginParams(email: $email, password: $password)';
 }
 
 
@@ -249,7 +243,7 @@ abstract mixin class _$LoginParamsCopyWith<$Res> implements $LoginParamsCopyWith
   factory _$LoginParamsCopyWith(_LoginParams value, $Res Function(_LoginParams) _then) = __$LoginParamsCopyWithImpl;
 @override @useResult
 $Res call({
- String email, String password, String? osInfo, String? deviceInfo, String fcmToken
+ String email, String password
 });
 
 
@@ -266,13 +260,10 @@ class __$LoginParamsCopyWithImpl<$Res>
 
 /// Create a copy of LoginParams
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? email = null,Object? password = null,Object? osInfo = freezed,Object? deviceInfo = freezed,Object? fcmToken = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? email = null,Object? password = null,}) {
   return _then(_LoginParams(
 email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
-as String,osInfo: freezed == osInfo ? _self.osInfo : osInfo // ignore: cast_nullable_to_non_nullable
-as String?,deviceInfo: freezed == deviceInfo ? _self.deviceInfo : deviceInfo // ignore: cast_nullable_to_non_nullable
-as String?,fcmToken: null == fcmToken ? _self.fcmToken : fcmToken // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

@@ -8,26 +8,21 @@ part of 'login_response.dart';
 
 _LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
     _LoginResponse(
-      diagnostic: json['diagnostic'] == null
-          ? null
-          : Diagnostic.fromJson(json['diagnostic'] as Map<String, dynamic>),
       data: json['data'] == null
           ? null
           : DataLogin.fromJson(json['data'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$LoginResponseToJson(_LoginResponse instance) =>
-    <String, dynamic>{'diagnostic': instance.diagnostic, 'data': instance.data};
+    <String, dynamic>{'data': instance.data};
 
 _DataLogin _$DataLoginFromJson(Map<String, dynamic> json) => _DataLogin(
-  token: json['token'] as String?,
-  tokenType: json['tokenType'] as String?,
-  refreshToken: json['refreshToken'] as String?,
+  accessToken: json['access_token'] as String?,
+  refreshToken: json['refresh_token'] as String?,
 );
 
 Map<String, dynamic> _$DataLoginToJson(_DataLogin instance) =>
     <String, dynamic>{
-      'token': instance.token,
-      'tokenType': instance.tokenType,
-      'refreshToken': instance.refreshToken,
+      'access_token': instance.accessToken,
+      'refresh_token': instance.refreshToken,
     };

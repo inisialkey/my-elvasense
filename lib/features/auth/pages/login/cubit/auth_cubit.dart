@@ -18,7 +18,7 @@ class AuthCubit extends Cubit<AuthState> {
       if (l is ServerFailure) {
         emit(AuthStateFailure(l.message ?? ''));
       }
-    }, (r) => emit(AuthStateSuccess(r.token)));
+    }, (r) => emit(AuthStateSuccess(r.accessToken)));
   }
 }
 

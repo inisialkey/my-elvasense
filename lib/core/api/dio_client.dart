@@ -26,8 +26,7 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
     }
   }
 
-  String token() =>
-      getData(MainBoxKeys.authToken) ?? getData(MainBoxKeys.generalToken);
+  String token() => getData(MainBoxKeys.accessToken);
 
   Dio get dio {
     if (_isUnitTest) {
@@ -55,6 +54,7 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'x-api-key': const String.fromEnvironment('API_KEY'),
         if (_token != null) ...{'Authorization': _token},
       },
       receiveTimeout: const Duration(minutes: 1),

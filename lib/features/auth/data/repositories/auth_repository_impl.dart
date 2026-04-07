@@ -17,12 +17,12 @@ class AuthRepositoryImpl implements AuthRepository {
     return response.fold((failure) => Left(failure), (loginResponse) {
       mainBoxMixin.addData(MainBoxKeys.isLogin, true);
       mainBoxMixin.addData(
-        MainBoxKeys.authToken,
-        '${loginResponse.data?.tokenType} ${loginResponse.data?.token}',
+        MainBoxKeys.accessToken,
+        loginResponse.data?.accessToken,
       );
       mainBoxMixin.addData(
         MainBoxKeys.refreshToken,
-        '${loginResponse.data?.tokenType} ${loginResponse.data?.refreshToken}',
+        loginResponse.data?.refreshToken,
       );
 
       return Right(loginResponse.toEntity());

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myelvasense/core/core.dart';
 import 'package:myelvasense/utils/utils.dart';
 
@@ -12,11 +13,21 @@ class MainCubit extends Cubit<MainState> {
   int _currentIndex = 0;
   late List<DataHelper>? dataMenus;
 
+  int get currentIndex => _currentIndex;
+
+  static const _routeMap = [
+    Routes.dashboard,
+    Routes.device,
+    Routes.chatAi,
+    Routes.services,
+  ];
+
   void updateIndex(int index, DataHelper? mockMenu, {BuildContext? context}) {
     emit(const MainStateLoading());
     _currentIndex = index;
     if (context != null) {
       initMenu(context, mockMenu: mockMenu);
+      context.goNamed(_routeMap[index].name);
     }
     emit(MainStateSuccess(mockMenu ?? dataMenus?[_currentIndex]));
   }
@@ -24,38 +35,43 @@ class MainCubit extends Cubit<MainState> {
   void initMenu(BuildContext context, {DataHelper? mockMenu}) {
     dataMenus = [
       DataHelper(
-        title: Strings.of(context)?.dashboard ?? 'Dashboard',
+        title: Strings.of(context)?.dashboard ?? 'Home',
+        icon: Icons.home,
         isSelected: true,
       ),
-      DataHelper(title: Strings.of(context)?.settings ?? 'Settings'),
-      DataHelper(title: Strings.of(context)?.logout ?? 'Logout'),
+      DataHelper(
+        title: 'Device',
+        icon: Icons.devices,
+      ),
+      DataHelper(
+        title: 'Chat AI',
+        icon: Icons.smart_toy,
+      ),
+      DataHelper(
+        title: 'Services',
+        icon: Icons.grid_view,
+      ),
     ];
-    updateIndex(_currentIndex, mockMenu);
+    // Sync index from current route
+    _syncIndexFromRoute(context);
+    emit(MainStateSuccess(mockMenu ?? dataMenus?[_currentIndex]));
   }
 
-  bool onBackPressed(
-    BuildContext context,
-    GlobalKey<ScaffoldState> scaffoldState, {
-    bool isDrawerClosed = false,
-  }) {
-    if (dataMenus == null) {
-      return false;
+  void _syncIndexFromRoute(BuildContext context) {
+    final location = GoRouterState.of(context).matchedLocation;
+    for (int i = 0; i < _routeMap.length; i++) {
+      if (location == _routeMap[i].path) {
+        _currentIndex = i;
+        return;
+      }
     }
-    if (dataMenus?[_currentIndex].title ==
-        (Strings.of(context)?.dashboard ?? 'Dashboard')) {
+  }
+
+  bool onBackPressed(BuildContext context, {bool isDrawerClosed = false}) {
+    if (_currentIndex == 0) {
       return true;
     } else {
-      if ((scaffoldState.currentState?.isEndDrawerOpen ?? false) ||
-          isDrawerClosed) {
-        //hide navigation drawer
-        scaffoldState.currentState?.openDrawer();
-      } else {
-        for (final menu in dataMenus!) {
-          menu.isSelected =
-              menu.title == (Strings.of(context)?.dashboard ?? 'Dashboard');
-        }
-      }
-
+      updateIndex(0, null, context: context);
       return false;
     }
   }

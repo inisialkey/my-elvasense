@@ -92,11 +92,8 @@ class DioInterceptor extends Interceptor
 
     response.fold((l) => logoutBox(), (r) {
       final data = r.data;
-      addData(
-        MainBoxKeys.refreshToken,
-        '${data?.tokenType} ${data?.refreshToken}',
-      );
-      addData(MainBoxKeys.authToken, '${data?.tokenType} ${data?.token}');
+      addData(MainBoxKeys.refreshToken, data?.refreshToken);
+      addData(MainBoxKeys.accessToken, data?.accessToken);
     });
   }
 

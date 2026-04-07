@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Login {
 
- String? get token;
+ String? get accessToken; String? get refreshToken;
 /// Create a copy of Login
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $LoginCopyWith<Login> get copyWith => _$LoginCopyWithImpl<Login>(this as Login, 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Login&&(identical(other.token, token) || other.token == token));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Login&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,token);
+int get hashCode => Object.hash(runtimeType,accessToken,refreshToken);
 
 @override
 String toString() {
-  return 'Login(token: $token)';
+  return 'Login(accessToken: $accessToken, refreshToken: $refreshToken)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $LoginCopyWith<$Res>  {
   factory $LoginCopyWith(Login value, $Res Function(Login) _then) = _$LoginCopyWithImpl;
 @useResult
 $Res call({
- String? token
+ String? accessToken, String? refreshToken
 });
 
 
@@ -62,9 +62,10 @@ class _$LoginCopyWithImpl<$Res>
 
 /// Create a copy of Login
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? token = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? accessToken = freezed,Object? refreshToken = freezed,}) {
   return _then(_self.copyWith(
-token: freezed == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
+accessToken: freezed == accessToken ? _self.accessToken : accessToken // ignore: cast_nullable_to_non_nullable
+as String?,refreshToken: freezed == refreshToken ? _self.refreshToken : refreshToken // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -147,10 +148,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? token)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? accessToken,  String? refreshToken)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Login() when $default != null:
-return $default(_that.token);case _:
+return $default(_that.accessToken,_that.refreshToken);case _:
   return orElse();
 
 }
@@ -168,10 +169,10 @@ return $default(_that.token);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? token)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? accessToken,  String? refreshToken)  $default,) {final _that = this;
 switch (_that) {
 case _Login():
-return $default(_that.token);}
+return $default(_that.accessToken,_that.refreshToken);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -185,10 +186,10 @@ return $default(_that.token);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? token)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? accessToken,  String? refreshToken)?  $default,) {final _that = this;
 switch (_that) {
 case _Login() when $default != null:
-return $default(_that.token);case _:
+return $default(_that.accessToken,_that.refreshToken);case _:
   return null;
 
 }
@@ -200,10 +201,11 @@ return $default(_that.token);case _:
 
 
 class _Login implements Login {
-  const _Login({this.token});
+  const _Login({this.accessToken, this.refreshToken});
   
 
-@override final  String? token;
+@override final  String? accessToken;
+@override final  String? refreshToken;
 
 /// Create a copy of Login
 /// with the given fields replaced by the non-null parameter values.
@@ -215,16 +217,16 @@ _$LoginCopyWith<_Login> get copyWith => __$LoginCopyWithImpl<_Login>(this, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Login&&(identical(other.token, token) || other.token == token));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Login&&(identical(other.accessToken, accessToken) || other.accessToken == accessToken)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,token);
+int get hashCode => Object.hash(runtimeType,accessToken,refreshToken);
 
 @override
 String toString() {
-  return 'Login(token: $token)';
+  return 'Login(accessToken: $accessToken, refreshToken: $refreshToken)';
 }
 
 
@@ -235,7 +237,7 @@ abstract mixin class _$LoginCopyWith<$Res> implements $LoginCopyWith<$Res> {
   factory _$LoginCopyWith(_Login value, $Res Function(_Login) _then) = __$LoginCopyWithImpl;
 @override @useResult
 $Res call({
- String? token
+ String? accessToken, String? refreshToken
 });
 
 
@@ -252,9 +254,10 @@ class __$LoginCopyWithImpl<$Res>
 
 /// Create a copy of Login
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? token = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? accessToken = freezed,Object? refreshToken = freezed,}) {
   return _then(_Login(
-token: freezed == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
+accessToken: freezed == accessToken ? _self.accessToken : accessToken // ignore: cast_nullable_to_non_nullable
+as String?,refreshToken: freezed == refreshToken ? _self.refreshToken : refreshToken // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
