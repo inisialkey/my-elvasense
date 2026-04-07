@@ -31,3 +31,16 @@ class CacheFailure extends Failure {
   @override
   int get hashCode => 0;
 }
+
+class ConnectionFailure extends Failure {
+  final String message;
+
+  const ConnectionFailure([this.message = 'No internet connection']);
+
+  @override
+  bool operator ==(Object other) =>
+      other is ConnectionFailure && other.message == message;
+
+  @override
+  int get hashCode => message.hashCode;
+}

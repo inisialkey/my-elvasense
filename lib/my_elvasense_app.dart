@@ -22,6 +22,7 @@ class MyElvasenseApp extends StatelessWidget {
         BlocProvider(create: (_) => sl<SettingsCubit>()..getActiveTheme()),
         BlocProvider(create: (_) => sl<AuthCubit>()),
         BlocProvider(create: (_) => sl<LogoutCubit>()),
+        BlocProvider(create: (_) => sl<ConnectivityCubit>()),
       ],
       child: OKToast(
         child: ScreenUtilInit(
@@ -52,7 +53,54 @@ class MyElvasenseApp extends StatelessWidget {
                       textScaler: TextScaler.noScaling,
                       alwaysUse24HourFormat: true,
                     ),
-                    child: child!,
+                    child: BlocListener<ConnectivityCubit, ConnectivityState>(
+                      listener: (context, state) {
+                        final messenger = ScaffoldMessenger.of(context);
+                        messenger.hideCurrentMaterialBanner();
+
+                        switch (state) {
+                          case ConnectivityStateDisconnected():
+                            messenger.showMaterialBanner(
+                              MaterialBanner(
+                                backgroundColor: Theme.of(context)
+                                    .extension<MyElvasenseColors>()!
+                                    .red,
+                                content: const Text(
+                                  'No internet connection',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                leading: const Icon(
+                                  Icons.wifi_off,
+                                  color: Colors.white,
+                                ),
+                                actions: const [SizedBox.shrink()],
+                              ),
+                            );
+                          case ConnectivityStateConnected():
+                            messenger.showMaterialBanner(
+                              MaterialBanner(
+                                backgroundColor: Theme.of(context)
+                                    .extension<MyElvasenseColors>()!
+                                    .green,
+                                content: const Text(
+                                  'Connection restored',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                leading: const Icon(
+                                  Icons.wifi,
+                                  color: Colors.white,
+                                ),
+                                actions: const [SizedBox.shrink()],
+                              ),
+                            );
+                            Future.delayed(
+                              const Duration(seconds: 2),
+                              () => messenger.hideCurrentMaterialBanner(),
+                            );
+                        }
+                      },
+                      child: child ?? const SizedBox.shrink(),
+                    ),
                   );
                 },
                 title: Constants.get.appName,

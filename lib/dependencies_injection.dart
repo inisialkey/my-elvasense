@@ -19,6 +19,11 @@ Future<void> serviceLocator({
     await _initHiveBoxes(isUnitTest: isUnitTest, prefixBox: prefixBox);
   }
   sl.registerSingleton<DioClient>(DioClient(isUnitTest: isUnitTest));
+
+  if (!isUnitTest) {
+    sl.registerSingleton<ConnectivityService>(ConnectivityService());
+  }
+
   _dataSources();
   _repositories();
   _useCase();
@@ -72,6 +77,11 @@ void _cubit() {
 
   /// General
   sl.registerFactory(() => ReloadFormCubit());
+
+  /// Connectivity
+  if (sl.isRegistered<ConnectivityService>()) {
+    sl.registerFactory(() => ConnectivityCubit(sl()));
+  }
 
   /// Users
   sl.registerFactory(() => UserCubit(sl()));

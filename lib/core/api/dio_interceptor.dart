@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:myelvasense/core/core.dart';
+import 'package:myelvasense/dependencies_injection.dart';
 import 'package:myelvasense/features/auth/auth.dart';
 import 'package:myelvasense/utils/utils.dart';
 
@@ -11,6 +12,18 @@ class DioInterceptor extends Interceptor
     with FirebaseCrashLogger, MainBoxMixin {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    // Check connectivity before proceeding
+    if (sl.isRegistered<ConnectivityService>() &&
+        !sl<ConnectivityService>().isConnected) {
+      return handler.reject(
+        DioException(
+          requestOptions: options,
+          type: DioExceptionType.connectionError,
+          message: 'No internet connection',
+        ),
+      );
+    }
+
     String headerMessage = '';
     options.headers.forEach((k, v) => headerMessage += '► $k: $v\n');
 

@@ -89,6 +89,9 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
       final result = await isolateParse.parseInBackground();
       return Right(result);
     } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.connectionError) {
+        return Left(ConnectionFailure(e.message ?? 'No internet connection'));
+      }
       try {
         if (!_isUnitTest) {
           nonFatalError(error: e, stackTrace: stackTrace);
@@ -130,6 +133,9 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
       final result = await isolateParse.parseInBackground();
       return Right(result);
     } on DioException catch (e, stackTrace) {
+      if (e.type == DioExceptionType.connectionError) {
+        return Left(ConnectionFailure(e.message ?? 'No internet connection'));
+      }
       try {
         if (!_isUnitTest) {
           nonFatalError(error: e, stackTrace: stackTrace);
