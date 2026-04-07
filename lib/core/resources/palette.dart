@@ -91,6 +91,9 @@ class Palette {
   static const Color handleBarLight = Color(0xffB8B9BB);
   static const Color handleBarDark = Color(0xff495A6C);
 
+  static const Color red = Color(0xffEF4444);
+  static const Color lightRed = Color(0xffFEE2E2);
+
   static const Color redMocha = Color(0xfff38ba8);
   static const Color greenMocha = Color(0xffa6e3a1);
   static const Color roseWaterMocha = Color(0xfff5e0dc);

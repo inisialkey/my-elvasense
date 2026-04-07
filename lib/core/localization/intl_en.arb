@@ -24,7 +24,7 @@
   "chooseLanguage": "Choose Language",
   "errorNoData": "No data",
   "logout": "Logout",
-  "logoutDesc": "Do you want to logout from the app?",
+  "logoutDesc": "Are you sure want to logout?",
   "yes": "Yes",
   "lastUpdate": "Last Update: ",
   "name": "Name"

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myelvasense/core/core.dart';
 import 'package:myelvasense/features/features.dart';
 import 'package:myelvasense/utils/utils.dart';
@@ -25,102 +27,126 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) => Parent(
-    child: Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                Theme.of(context).brightness == Brightness.dark
-                    ? 'assets/images/background_dark.jpeg'
-                    : 'assets/images/background.jpeg',
-              ),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
+    avoidBottomInset: false,
+    child: BlocListener<AuthCubit, AuthState>(
+      listener: (_, state) => switch (state) {
+        AuthStateLoading() => context.show(),
+        AuthStateSuccess() => (() {
+          context.dismiss();
 
-        Positioned.fill(
-          bottom: 350.w,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  Images.icLogo,
-                  width: Dimens.logo,
-                  height: Dimens.logo,
-                  fit: BoxFit.cover,
-                ),
-                SpacerV(value: Dimens.space24),
-                Text(
-                  'Welcome Back',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 28.sp,
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SpacerV(value: Dimens.space12),
-                Text(
-                  'We are glad you are back to continue your \nprogress',
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-        ),
-
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: Dimens.space24),
-            width: double.maxFinite,
+          TextInput.finishAutofillContext();
+          context.goNamed(Routes.root.name);
+        })(),
+        AuthStateFailure(:final message) => (() {
+          context.dismiss();
+          message.toToastError(context);
+        })(),
+        _ => {},
+      },
+      child: Stack(
+        children: [
+          Container(
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(Dimens.cornerRadius),
-                topRight: Radius.circular(Dimens.cornerRadius),
+              image: DecorationImage(
+                image: AssetImage(
+                  Theme.of(context).brightness == Brightness.dark
+                      ? 'assets/images/background_dark.jpeg'
+                      : 'assets/images/background.jpeg',
+                ),
+                fit: BoxFit.cover,
               ),
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? Palette.cardDark
-                  : Palette.card,
-            ),
-            child: Column(
-              children: [
-                const SpacerV(),
-                Container(
-                  width: 140.w,
-                  height: Dimens.space6,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.w),
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Palette.handleBarDark
-                        : Palette.handleBarLight,
-                  ),
-                ),
-                SpacerV(value: 22.w),
-                _loginForm(),
-                SpacerV(value: Dimens.space24),
-                Text(
-                  'By continuing, you agree to our Terms of Service and \nPrivacy Policy.',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w500),
-                  textAlign: TextAlign.center,
-                ),
-                SpacerV(value: 32.w),
-              ],
             ),
           ),
-        ),
-      ],
+
+          Positioned.fill(
+            bottom: 350.w,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    Images.icLogo,
+                    width: Dimens.logo,
+                    height: Dimens.logo,
+                    fit: BoxFit.cover,
+                  ),
+                  SpacerV(value: Dimens.space24),
+                  Text(
+                    'Welcome Back',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28.sp,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SpacerV(value: Dimens.space12),
+                  Text(
+                    'We are glad you are back to continue your \nprogress',
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: Dimens.space24),
+              width: double.maxFinite,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(Dimens.cornerRadius),
+                  topRight: Radius.circular(Dimens.cornerRadius),
+                ),
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Palette.cardDark
+                    : Palette.card,
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SpacerV(),
+                      Container(
+                        width: 140.w,
+                        height: Dimens.space6,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.w),
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Palette.handleBarDark
+                              : Palette.handleBarLight,
+                        ),
+                      ),
+                      SpacerV(value: 22.w),
+                      _loginForm(),
+                      SpacerV(value: Dimens.space24),
+                      Text(
+                        'By continuing, you agree to our Terms of Service and \nPrivacy Policy.',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SpacerV(value: 32.w),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     ),
   );
 

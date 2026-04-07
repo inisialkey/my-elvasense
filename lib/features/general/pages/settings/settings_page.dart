@@ -102,6 +102,13 @@ class _SettingsPageState extends State<SettingsPage> with MainBoxMixin {
                 );
               },
             ),
+            Button(
+              title: 'Logout',
+              onPressed: () => showDialog(
+                context: context,
+                builder: (_) => const LogoutDialog(),
+              ),
+            ),
           ],
         ),
       ),

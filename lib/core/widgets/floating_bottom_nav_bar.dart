@@ -117,8 +117,8 @@ class _NavBarItem extends StatelessWidget {
         children: [
           Image.asset(
             assetPath,
-            width: 32.w,
-            height: 32.w,
+            width: 24.w,
+            height: 24.w,
             color: color,
             colorBlendMode: BlendMode.srcIn,
           ),
@@ -126,6 +126,7 @@ class _NavBarItem extends StatelessWidget {
           Text(
             item.label,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              fontSize: 11.sp,
               color: color,
               fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
             ),

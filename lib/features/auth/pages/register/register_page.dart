@@ -30,6 +30,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) => Parent(
+    avoidBottomInset: false,
     appBar: const MyAppBar(),
     extendBodyBehindAppBar: true,
     child: Stack(
@@ -99,122 +100,133 @@ class _RegisterPageState extends State<RegisterPage> {
                   ? Palette.cardDark
                   : Palette.card,
             ),
-            child: Column(
-              children: [
-                const SpacerV(),
-                Container(
-                  width: 140.w,
-                  height: Dimens.space6,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.w),
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Palette.handleBarDark
-                        : Palette.handleBarLight,
-                  ),
-                ),
-                SpacerV(value: 22.w),
-                TextF(
-                  autoFillHints: const [AutofillHints.email],
-                  key: const Key('email'),
-                  focusNode: _fnEmail,
-                  textInputAction: TextInputAction.next,
-                  controller: _conEmail,
-                  keyboardType: TextInputType.emailAddress,
-                  hint: 'Email Address',
-                  isValid: _formValidator.putIfAbsent('email', () => false),
-                  validatorListener: (String value) {
-                    _formValidator['email'] = value.isValidEmail();
-                    context.read<ReloadFormCubit>().reload();
-                  },
-                  errorMessage: Strings.of(context)!.errorInvalidEmail,
-                ),
-                SpacerV(value: Dimens.space12),
-                TextF(
-                  autoFillHints: const [AutofillHints.password],
-                  key: const Key('password'),
-                  focusNode: _fnPassword,
-                  textInputAction: TextInputAction.done,
-                  controller: _conPassword,
-                  keyboardType: TextInputType.text,
-                  obscureText: !_isPasswordVisible,
-                  hint: 'Password',
-                  suffixIcon: IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    onPressed: () {
-                      _isPasswordVisible = !_isPasswordVisible;
-                      context.read<ReloadFormCubit>().reload();
-                    },
-                    icon: Icon(
-                      _isPasswordVisible
-                          ? Icons.visibility_off
-                          : Icons.visibility,
+            child: Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SpacerV(),
+                    Container(
+                      width: 140.w,
+                      height: Dimens.space6,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.w),
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Palette.handleBarDark
+                            : Palette.handleBarLight,
+                      ),
                     ),
-                  ),
-                  isValid: _formValidator.putIfAbsent('password', () => false),
-                  validatorListener: (String value) {
-                    _formValidator['password'] = value.length > 5;
-                    context.read<ReloadFormCubit>().reload();
-                  },
-                  errorMessage: Strings.of(context)!.errorPasswordLength,
-                ),
-                SpacerV(value: Dimens.space12),
-                TextF(
-                  key: const Key('repeat_password'),
-                  focusNode: _fnPasswordRepeat,
-                  textInputAction: TextInputAction.done,
-                  controller: _conPasswordRepeat,
-                  keyboardType: TextInputType.text,
-                  obscureText: !_isPasswordRepeatVisible,
-                  hint: '••••••••••••',
-                  suffixIcon: IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    onPressed: () {
-                      _isPasswordRepeatVisible = !_isPasswordRepeatVisible;
-                      context.read<ReloadFormCubit>().reload();
-                    },
-                    icon: Icon(
-                      !_isPasswordRepeatVisible
-                          ? Icons.visibility_off
-                          : Icons.visibility,
+                    SpacerV(value: 22.w),
+                    TextF(
+                      autoFillHints: const [AutofillHints.email],
+                      key: const Key('email'),
+                      focusNode: _fnEmail,
+                      textInputAction: TextInputAction.next,
+                      controller: _conEmail,
+                      keyboardType: TextInputType.emailAddress,
+                      hint: 'Email Address',
+                      isValid: _formValidator.putIfAbsent('email', () => false),
+                      validatorListener: (String value) {
+                        _formValidator['email'] = value.isValidEmail();
+                        context.read<ReloadFormCubit>().reload();
+                      },
+                      errorMessage: Strings.of(context)!.errorInvalidEmail,
                     ),
-                  ),
-                  isValid: _formValidator.putIfAbsent(
-                    'repeat_password',
-                    () => false,
-                  ),
-                  validatorListener: (String value) {
-                    _formValidator['repeat_password'] =
-                        value == _conPassword.text;
-                    context.read<ReloadFormCubit>().reload();
-                  },
-                  errorMessage: Strings.of(context)!.errorPasswordNotMatch,
-                  semantic: 'repeat_password',
+                    SpacerV(value: Dimens.space12),
+                    TextF(
+                      autoFillHints: const [AutofillHints.password],
+                      key: const Key('password'),
+                      focusNode: _fnPassword,
+                      textInputAction: TextInputAction.done,
+                      controller: _conPassword,
+                      keyboardType: TextInputType.text,
+                      obscureText: !_isPasswordVisible,
+                      hint: 'Password',
+                      suffixIcon: IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        onPressed: () {
+                          _isPasswordVisible = !_isPasswordVisible;
+                          context.read<ReloadFormCubit>().reload();
+                        },
+                        icon: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                      ),
+                      isValid: _formValidator.putIfAbsent(
+                        'password',
+                        () => false,
+                      ),
+                      validatorListener: (String value) {
+                        _formValidator['password'] = value.length > 5;
+                        context.read<ReloadFormCubit>().reload();
+                      },
+                      errorMessage: Strings.of(context)!.errorPasswordLength,
+                    ),
+                    SpacerV(value: Dimens.space12),
+                    TextF(
+                      key: const Key('repeat_password'),
+                      focusNode: _fnPasswordRepeat,
+                      textInputAction: TextInputAction.done,
+                      controller: _conPasswordRepeat,
+                      keyboardType: TextInputType.text,
+                      obscureText: !_isPasswordRepeatVisible,
+                      hint: '••••••••••••',
+                      suffixIcon: IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        onPressed: () {
+                          _isPasswordRepeatVisible = !_isPasswordRepeatVisible;
+                          context.read<ReloadFormCubit>().reload();
+                        },
+                        icon: Icon(
+                          !_isPasswordRepeatVisible
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                      ),
+                      isValid: _formValidator.putIfAbsent(
+                        'repeat_password',
+                        () => false,
+                      ),
+                      validatorListener: (String value) {
+                        _formValidator['repeat_password'] =
+                            value == _conPassword.text;
+                        context.read<ReloadFormCubit>().reload();
+                      },
+                      errorMessage: Strings.of(context)!.errorPasswordNotMatch,
+                      semantic: 'repeat_password',
+                    ),
+                    SpacerV(value: Dimens.space12),
+                    CheckboxAgreement(
+                      value: _isAgreed,
+                      onChanged: (value) {
+                        setState(() => _isAgreed = value ?? false);
+                        context.read<ReloadFormCubit>().reload();
+                      },
+                      onTapTerms: () => context.pushNamed('/terms-of-service'),
+                      onTapPrivacy: () =>
+                          context.pushNamed('/privacy-policy'),
+                    ),
+                    SpacerV(value: Dimens.space24),
+                    Button(
+                      width: double.maxFinite,
+                      title: 'Next',
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Palette.buttonDark
+                          : Palette.button,
+                      titleColor: Palette.text,
+                      onPressed: () =>
+                          context.pushNamed(Routes.completeProfile.name),
+                    ),
+                    SpacerV(value: 32.w),
+                  ],
                 ),
-                SpacerV(value: Dimens.space12),
-                CheckboxAgreement(
-                  value: _isAgreed,
-                  onChanged: (value) {
-                    setState(() => _isAgreed = value ?? false);
-                    context.read<ReloadFormCubit>().reload();
-                  },
-                  onTapTerms: () => context.pushNamed('/terms-of-service'),
-                  onTapPrivacy: () => context.pushNamed('/privacy-policy'),
-                ),
-                SpacerV(value: Dimens.space24),
-                Button(
-                  width: double.maxFinite,
-                  title: 'Next',
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? Palette.buttonDark
-                      : Palette.button,
-                  titleColor: Palette.text,
-                  onPressed: () =>
-                      context.pushNamed(Routes.completeProfile.name),
-                ),
-                SpacerV(value: 32.w),
-              ],
+              ),
             ),
           ),
         ),

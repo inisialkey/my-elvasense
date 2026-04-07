@@ -13,7 +13,7 @@ class Images {
 
   static String icLogoSplash = 'assets/images/ic_logo_splash.png';
   static String icLogo = 'assets/images/ic_logo.png';
-  static String icHome = 'assets/images/ic_home.png';
+  static String icHome = 'assets/icons/ic_home.png';
   static String icHomeActive = 'assets/icons/ic_home_active.png';
   static String icDevice = 'assets/icons/ic_device.png';
   static String icDeviceActive = 'assets/icons/ic_device_active.png';
