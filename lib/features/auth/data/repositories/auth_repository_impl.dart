@@ -40,22 +40,6 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, GeneralToken>> generalToken(
-    GeneralTokenParams params,
-  ) async {
-    final response = await authRemoteDatasource.generalToken(params);
-
-    return response.fold((failure) => Left(failure), (loginResponse) {
-      mainBoxMixin.addData(
-        MainBoxKeys.generalToken,
-        '${loginResponse.data?.tokenType} ${loginResponse.data?.token}',
-      );
-
-      return Right(loginResponse.toEntity());
-    });
-  }
-
-  @override
   Future<Either<Failure, String>> logout() async {
     final response = await authRemoteDatasource.logout();
 

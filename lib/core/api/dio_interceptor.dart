@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:myelvasense/core/core.dart';
 import 'package:myelvasense/dependencies_injection.dart';
 import 'package:myelvasense/features/auth/auth.dart';
@@ -10,6 +12,10 @@ import 'package:myelvasense/utils/utils.dart';
 // coverage:ignore-start
 class DioInterceptor extends Interceptor
     with FirebaseCrashLogger, MainBoxMixin {
+  /// Completer-based lock: only the first 401 triggers a refresh.
+  /// Subsequent 401s await this Completer's future.
+  static Completer<bool>? _refreshCompleter;
+
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     // Check connectivity before proceeding
@@ -60,28 +66,68 @@ class DioInterceptor extends Interceptor
     );
 
     nonFatalError(error: dioException, stackTrace: dioException.stackTrace);
-    if (dioException.response?.statusCode == 401 &&
-        dioException.response?.data['meta']['description'] ==
-            'Unauthenticated.') {
-      if (getData(MainBoxKeys.refreshToken) != null) {
-        await refreshToken();
 
-        // Retry the request with the new token
-        return handler.resolve(await _retry(dioException.requestOptions));
-      } else {
-        logoutBox();
-      }
+    // Only handle 401 with 'jwt error' message
+    final responseData = dioException.response?.data;
+    final isJwtError =
+        responseData is Map<String, dynamic> &&
+        responseData['message'] == 'jwt error';
+
+    if (dioException.response?.statusCode != 401 || !isJwtError) {
+      return handler.next(dioException);
     }
-    return handler.next(dioException);
+
+    final sessionExpiredException = DioException(
+      requestOptions: dioException.requestOptions,
+      message: 'SESSION_EXPIRED',
+    );
+
+    // No refresh token stored — session is invalid
+    if (getData(MainBoxKeys.refreshToken) == null) {
+      await logoutBox();
+      _showSessionExpiredDialog();
+      return handler.reject(sessionExpiredException);
+    }
+
+    // Another request is already refreshing — wait for it
+    if (_refreshCompleter != null) {
+      final success = await _refreshCompleter!.future;
+      if (success) {
+        return handler.resolve(await _retry(dioException.requestOptions));
+      }
+      return handler.reject(sessionExpiredException);
+    }
+
+    // First 401 — take the lock and refresh
+    _refreshCompleter = Completer<bool>();
+    try {
+      final success = await _refreshToken();
+      _refreshCompleter!.complete(success);
+      _refreshCompleter = null;
+
+      if (success) {
+        return handler.resolve(await _retry(dioException.requestOptions));
+      }
+      _showSessionExpiredDialog();
+      return handler.reject(sessionExpiredException);
+    } catch (e) {
+      _refreshCompleter!.complete(false);
+      _refreshCompleter = null;
+      await logoutBox();
+      _showSessionExpiredDialog();
+      return handler.reject(sessionExpiredException);
+    }
   }
 
   Future<Response<dynamic>> _retry(RequestOptions requestOptions) {
+    final newToken = getData(MainBoxKeys.accessToken);
     final options = Options(
       method: requestOptions.method,
-      headers: requestOptions.headers,
+      headers: {...requestOptions.headers, 'Authorization': 'Bearer $newToken'},
     );
 
-    return DioClient().dio.request<dynamic>(
+    // Use the DioClient singleton — its dio getter reads the fresh token from Hive
+    return sl<DioClient>().dio.request<dynamic>(
       requestOptions.path,
       data: requestOptions.data,
       queryParameters: requestOptions.queryParameters,
@@ -89,24 +135,76 @@ class DioInterceptor extends Interceptor
     );
   }
 
-  Future<void> refreshToken() async {
-    /// Call API Refresh token
-    final response = await DioClient().postRequest(
-      ListAPI.generalToken,
-      data: {
-        'clientId': const String.fromEnvironment('USER_CLIENT_ID'),
-        'clientSecret': const String.fromEnvironment('USER_CLIENT_SECRET'),
-        'grantType': 'refresh_token',
-        'refreshToken': getData(MainBoxKeys.refreshToken),
-      },
-      converter: (response) =>
-          LoginResponse.fromJson(response as Map<String, dynamic>),
-    );
+  /// Calls the refresh token API using a raw Dio instance (no interceptors)
+  /// to avoid recursive interceptor loops.
+  /// Returns true on success, false on failure.
+  Future<bool> _refreshToken() async {
+    try {
+      const baseUrl = String.fromEnvironment('BASE_URL');
+      final rawDio = Dio(
+        BaseOptions(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'x-api-key': const String.fromEnvironment('API_KEY'),
+            'Authorization': 'Bearer ${getData(MainBoxKeys.refreshToken)}',
+          },
+          receiveTimeout: const Duration(minutes: 1),
+          connectTimeout: const Duration(minutes: 1),
+          validateStatus: (status) => true,
+        ),
+      );
 
-    response.fold((l) => logoutBox(), (r) {
-      final data = r.data;
-      addData(MainBoxKeys.refreshToken, data?.refreshToken);
-      addData(MainBoxKeys.accessToken, data?.accessToken);
+      final response = await rawDio.post('$baseUrl${ListAPI.refreshToken}');
+
+      if ((response.statusCode ?? 0) < 200 ||
+          (response.statusCode ?? 0) > 201) {
+        return false;
+      }
+
+      final loginResponse = LoginResponse.fromJson(
+        response.data as Map<String, dynamic>,
+      );
+      final data = loginResponse.data;
+
+      if (data?.accessToken == null || data?.refreshToken == null) {
+        await logoutBox();
+        return false;
+      }
+
+      await addData(MainBoxKeys.refreshToken, data!.refreshToken);
+      await addData(MainBoxKeys.accessToken, data.accessToken);
+      return true;
+    } catch (_) {
+      await logoutBox();
+      return false;
+    }
+  }
+
+  void _showSessionExpiredDialog() {
+    final context = AppRoute.navigatorKey.currentContext;
+    if (context == null || !context.mounted) return;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!context.mounted) return;
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => AlertDialog(
+          title: const Text('Session Expired'),
+          content: const Text('Your session has expired. Please log in again.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                context.pop();
+                logoutBox();
+                context.goNamed(Routes.root.name);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
     });
   }
 

@@ -32,12 +32,16 @@ class AppRoute {
   static late BuildContext context;
   static late bool isUnitTest;
 
+  /// Global navigator key for showing dialogs from non-UI code (e.g., interceptors)
+  static final navigatorKey = GlobalKey<NavigatorState>();
+
   AppRoute.setStream(BuildContext ctx, {bool isTest = false}) {
     context = ctx;
     isUnitTest = isTest;
   }
 
   static final GoRouter router = GoRouter(
+    navigatorKey: navigatorKey,
     routes: [
       GoRoute(
         path: Routes.splashScreen.path,

@@ -32,6 +32,14 @@ class CacheFailure extends Failure {
   int get hashCode => 0;
 }
 
+class SessionExpiredFailure extends Failure {
+  @override
+  bool operator ==(Object other) => other is SessionExpiredFailure;
+
+  @override
+  int get hashCode => 0;
+}
+
 class ConnectionFailure extends Failure {
   final String message;
 

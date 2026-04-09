@@ -16,7 +16,11 @@ class LogoutCubit extends Cubit<LogoutState> {
     emit(const LogoutStateLoading());
     final data = await _postLogout.call(NoParams());
     data.fold(
-      (l) => emit(LogoutStateFailure((l as ServerFailure).message ?? '')),
+      (l) {
+        if (l is ServerFailure) {
+          emit(LogoutStateFailure(l.message ?? ''));
+        }
+      },
       (r) async {
         await sl<MainBoxMixin>().logoutBox();
         emit(LogoutStateSuccess(r));

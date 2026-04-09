@@ -70,7 +70,7 @@ class LogoutDialog extends StatelessWidget {
                     title: 'Cancel',
                     backgroundColor: Palette.lightRed,
                     textColor: Palette.red,
-                    onTap: () => Navigator.of(context).pop(),
+                    onTap: () => context.pop(),
                   ),
                 ),
 

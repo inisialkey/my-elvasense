@@ -12,7 +12,6 @@ enum ActiveTheme {
 }
 
 enum MainBoxKeys {
-  generalToken,
   accessToken,
   refreshToken,
   fcm,
@@ -46,5 +45,6 @@ mixin class MainBoxMixin {
     /// Clear the box
     await removeData(MainBoxKeys.isLogin);
     await removeData(MainBoxKeys.accessToken);
+    await removeData(MainBoxKeys.refreshToken);
   }
 }

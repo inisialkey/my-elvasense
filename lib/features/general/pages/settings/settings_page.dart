@@ -26,6 +26,7 @@ class _SettingsPageState extends State<SettingsPage> with MainBoxMixin {
 
   @override
   Widget build(BuildContext context) => Parent(
+    appBar: const MyAppBar(),
     child: SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.all(Dimens.space16),
