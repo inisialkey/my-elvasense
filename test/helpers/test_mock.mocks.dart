@@ -89,22 +89,6 @@ class MockAuthRepository extends _i1.Mock implements _i5.AuthRepository {
           as _i6.Future<_i2.Either<_i7.Failure, _i5.Login>>);
 
   @override
-  _i6.Future<_i2.Either<_i7.Failure, _i5.Register>> register(
-    _i5.RegisterParams? params,
-  ) =>
-      (super.noSuchMethod(
-            Invocation.method(#register, [params]),
-            returnValue:
-                _i6.Future<_i2.Either<_i7.Failure, _i5.Register>>.value(
-                  _FakeEither_0<_i7.Failure, _i5.Register>(
-                    this,
-                    Invocation.method(#register, [params]),
-                  ),
-                ),
-          )
-          as _i6.Future<_i2.Either<_i7.Failure, _i5.Register>>);
-
-  @override
   _i6.Future<_i2.Either<_i7.Failure, String>> logout() =>
       (super.noSuchMethod(
             Invocation.method(#logout, []),
@@ -126,22 +110,6 @@ class MockAuthRemoteDatasource extends _i1.Mock
   MockAuthRemoteDatasource() {
     _i1.throwOnMissingStub(this);
   }
-
-  @override
-  _i6.Future<_i2.Either<_i7.Failure, _i5.RegisterResponse>> register(
-    _i5.RegisterParams? params,
-  ) =>
-      (super.noSuchMethod(
-            Invocation.method(#register, [params]),
-            returnValue:
-                _i6.Future<_i2.Either<_i7.Failure, _i5.RegisterResponse>>.value(
-                  _FakeEither_0<_i7.Failure, _i5.RegisterResponse>(
-                    this,
-                    Invocation.method(#register, [params]),
-                  ),
-                ),
-          )
-          as _i6.Future<_i2.Either<_i7.Failure, _i5.RegisterResponse>>);
 
   @override
   _i6.Future<_i2.Either<_i7.Failure, _i5.LoginResponse>> login(

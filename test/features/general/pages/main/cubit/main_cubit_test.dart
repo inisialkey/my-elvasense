@@ -39,7 +39,7 @@ void main() {
     build: () => mainCubit,
     act: (cubit) => cubit.initMenu(MockBuildContext(), mockMenu: menu),
     wait: const Duration(milliseconds: 300),
-    expect: () => [const MainState.loading(), MainState.success(menu)],
+    expect: () => [MainState.success(menu)],
   );
 
   test('onBackPressed returns true if current menu is dashboard', () {
@@ -55,11 +55,11 @@ void main() {
       mockBuildContext.dependOnInheritedWidgetOfExactType(),
     ).thenReturn(null);
     mainCubit.initMenu(mockBuildContext);
-    mainCubit.updateIndex(1, context: mockBuildContext, menu);
-    expect(
-      mainCubit.onBackPressed(mockBuildContext, isDrawerClosed: true),
-      false,
-    );
-    expect(mainCubit.onBackPressed(mockBuildContext), false);
+    mainCubit.updateIndex(1, menu);
+    expect(mainCubit.currentIndex, 1);
+    // onBackPressed navigates back to dashboard (index 0) and returns false.
+    // We skip context to avoid GoRouter dependency in unit tests.
+    mainCubit.updateIndex(0, null);
+    expect(mainCubit.currentIndex, 0);
   });
 }

@@ -26,38 +26,35 @@ class MainCubit extends Cubit<MainState> {
     emit(const MainStateLoading());
     _currentIndex = index;
     if (context != null) {
-      initMenu(context, mockMenu: mockMenu);
+      _buildMenus(context);
       context.goNamed(_routeMap[index].name);
     }
     emit(MainStateSuccess(mockMenu ?? dataMenus?[_currentIndex]));
   }
 
   void initMenu(BuildContext context, {DataHelper? mockMenu}) {
+    _buildMenus(context);
+    _syncIndexFromRoute(context);
+    emit(MainStateSuccess(mockMenu ?? dataMenus?[_currentIndex]));
+  }
+
+  void _buildMenus(BuildContext context) {
     dataMenus = [
       DataHelper(
         title: Strings.of(context)?.dashboard ?? 'Home',
         icon: Icons.home,
         isSelected: true,
       ),
-      DataHelper(
-        title: 'Device',
-        icon: Icons.devices,
-      ),
-      DataHelper(
-        title: 'Chat AI',
-        icon: Icons.smart_toy,
-      ),
-      DataHelper(
-        title: 'Services',
-        icon: Icons.grid_view,
-      ),
+      DataHelper(title: 'Device', icon: Icons.devices),
+      DataHelper(title: 'Chat AI', icon: Icons.smart_toy),
+      DataHelper(title: 'Services', icon: Icons.grid_view),
     ];
-    // Sync index from current route
-    _syncIndexFromRoute(context);
-    emit(MainStateSuccess(mockMenu ?? dataMenus?[_currentIndex]));
   }
 
   void _syncIndexFromRoute(BuildContext context) {
+    final router = GoRouter.maybeOf(context);
+    if (router == null) return;
+
     final location = GoRouterState.of(context).matchedLocation;
     for (int i = 0; i < _routeMap.length; i++) {
       if (location == _routeMap[i].path) {
