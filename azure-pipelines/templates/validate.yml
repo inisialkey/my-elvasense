@@ -1,0 +1,11 @@
+steps:
+  - template: flutter-setup.yml
+
+  - script: |
+      fvm flutter analyze
+    displayName: 'flutter analyze'
+
+  - script: |
+      fvm flutter test --exclude-tags broken --no-pub --reporter expanded \
+        $(find test -name "*_test.dart" ! -name "widget_test.dart")
+    displayName: 'flutter test (excluding widget_test.dart)'

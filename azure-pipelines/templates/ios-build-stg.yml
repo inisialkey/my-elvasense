@@ -1,0 +1,53 @@
+steps:
+  - template: flutter-setup.yml
+
+  - task: DownloadSecureFile@1
+    name: envStg
+    displayName: 'Download .env.stg.json'
+    inputs:
+      secureFile: '.env.stg.json'
+
+  - script: |
+      cp $(envStg.secureFilePath) .env.stg.json
+    displayName: 'Copy .env.stg.json to working directory'
+
+  - script: |
+      sed -i.bak "s/^version: \(.*\)+.*/version: \1+$(Build.BuildId)/" pubspec.yaml
+      cat pubspec.yaml | grep "^version:"
+    displayName: 'Set CFBundleVersion to BuildId'
+
+  - script: |
+      cd ios && bundle install
+    displayName: 'bundle install (ios)'
+
+  - script: |
+      cd ios && bundle exec fastlane setup_signing
+    displayName: 'Fastlane setup_signing (Match)'
+    env:
+      MATCH_PASSWORD: $(MATCH_PASSWORD)
+      MATCH_GIT_URL: $(MATCH_GIT_URL)
+      MATCH_GIT_BASIC_AUTHORIZATION: $(MATCH_GIT_BASIC_AUTHORIZATION)
+      APPLE_TEAM_ID: $(APPLE_TEAM_ID)
+      APP_STORE_CONNECT_API_KEY_ID: $(APP_STORE_CONNECT_API_KEY_ID)
+      APP_STORE_CONNECT_API_KEY_ISSUER_ID: $(APP_STORE_CONNECT_API_KEY_ISSUER_ID)
+      APP_STORE_CONNECT_API_KEY_CONTENT: $(APP_STORE_CONNECT_API_KEY_CONTENT)
+
+  - script: |
+      cd ios && pod install
+    displayName: 'pod install'
+
+  - script: |
+      fvm flutter build ipa \
+        --flavor stg \
+        -t lib/main.dart \
+        --dart-define-from-file=.env.stg.json \
+        --release \
+        --export-options-plist=ios/fastlane/ExportOptions.plist
+    displayName: 'flutter build ipa (stg)'
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish IPA artifact'
+    inputs:
+      targetPath: 'build/ios/ipa'
+      artifact: 'ios-stg-ipa'
+      publishLocation: 'pipeline'

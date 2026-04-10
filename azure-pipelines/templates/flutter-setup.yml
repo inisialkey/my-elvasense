@@ -1,0 +1,24 @@
+parameters:
+  - name: runBuildRunner
+    type: boolean
+    default: true
+
+steps:
+  - script: |
+      fvm install
+      fvm use --force
+      fvm flutter --version
+    displayName: 'Setup Flutter via FVM'
+
+  - script: |
+      fvm flutter pub get
+    displayName: 'flutter pub get'
+
+  - script: |
+      fvm flutter gen-l10n
+    displayName: 'Generate localization'
+
+  - ${{ if eq(parameters.runBuildRunner, true) }}:
+      - script: |
+          fvm flutter pub run build_runner build --delete-conflicting-outputs
+        displayName: 'Run build_runner'

@@ -1,0 +1,16 @@
+default_platform(:android)
+
+platform :android do
+  desc "Distribute staging build to Firebase App Distribution"
+  lane :distribute_stg do |options|
+    firebase_app_distribution(
+      app: ENV["FIREBASE_ANDROID_APP_ID_STG"],
+      android_artifact_type: "AAB",
+      android_artifact_path: options[:aab_path],
+      groups: "internal-testers",
+      release_notes: options[:release_notes] || "Build #{ENV['BUILD_BUILDID']}",
+      service_credentials_file: ENV["FIREBASE_SERVICE_CREDENTIALS_FILE"],
+      firebase_cli_token: ENV["FIREBASE_TOKEN"]
+    )
+  end
+end

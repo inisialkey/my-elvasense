@@ -1,0 +1,30 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Install certs and profiles via Match (read-only) using App Store Connect API key"
+  lane :setup_signing do
+    api_key = app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
+      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"],
+      is_key_content_base64: true
+    )
+    match(
+      type: "appstore",
+      app_identifier: "com.kalbe.myelvasense.stg",
+      readonly: true,
+      api_key: api_key
+    )
+  end
+
+  desc "Distribute staging build to Firebase App Distribution"
+  lane :distribute_stg do |options|
+    firebase_app_distribution(
+      app: ENV["FIREBASE_IOS_APP_ID_STG"],
+      ipa_path: options[:ipa_path],
+      groups: "internal-testers",
+      release_notes: options[:release_notes] || "Build #{ENV['BUILD_BUILDID']}",
+      firebase_cli_token: ENV["FIREBASE_TOKEN"]
+    )
+  end
+end

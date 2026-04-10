@@ -1,0 +1,43 @@
+steps:
+  - template: flutter-setup.yml
+
+  - task: DownloadSecureFile@1
+    name: keystore
+    displayName: 'Download Android keystore'
+    inputs:
+      secureFile: 'upload-keystore.jks'
+
+  - task: DownloadSecureFile@1
+    name: envStg
+    displayName: 'Download .env.stg.json'
+    inputs:
+      secureFile: '.env.stg.json'
+
+  - script: |
+      cp $(envStg.secureFilePath) .env.stg.json
+    displayName: 'Copy .env.stg.json to working directory'
+
+  - script: |
+      sed -i.bak "s/^version: \(.*\)+.*/version: \1+$(Build.BuildId)/" pubspec.yaml
+      cat pubspec.yaml | grep "^version:"
+    displayName: 'Set versionCode to BuildId'
+
+  - script: |
+      fvm flutter build appbundle \
+        --flavor stg \
+        -t lib/main.dart \
+        --dart-define-from-file=.env.stg.json \
+        --release
+    displayName: 'flutter build appbundle (stg)'
+    env:
+      MYAPP_RELEASE_STORE_FILE: $(keystore.secureFilePath)
+      MYAPP_RELEASE_STORE_PASSWORD: $(MYAPP_RELEASE_STORE_PASSWORD)
+      MYAPP_RELEASE_KEY_ALIAS: $(MYAPP_RELEASE_KEY_ALIAS)
+      MYAPP_RELEASE_KEY_PASSWORD: $(MYAPP_RELEASE_KEY_PASSWORD)
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish AAB artifact'
+    inputs:
+      targetPath: 'build/app/outputs/bundle/stgRelease/app-stg-release.aab'
+      artifact: 'android-stg-aab'
+      publishLocation: 'pipeline'

@@ -1,0 +1,41 @@
+parameters:
+  - name: platform
+    type: string
+    values:
+      - android
+      - ios
+  - name: artifactName
+    type: string
+  - name: artifactFile
+    type: string
+
+steps:
+  - task: DownloadPipelineArtifact@2
+    displayName: 'Download ${{ parameters.platform }} artifact'
+    inputs:
+      buildType: 'current'
+      artifactName: ${{ parameters.artifactName }}
+      targetPath: '$(Pipeline.Workspace)/${{ parameters.artifactName }}'
+
+  - script: |
+      cd ${{ parameters.platform }} && bundle install
+    displayName: 'bundle install (${{ parameters.platform }})'
+
+  - ${{ if eq(parameters.platform, 'android') }}:
+      - script: |
+          cd android && bundle exec fastlane distribute_stg \
+            aab_path:"$(Pipeline.Workspace)/${{ parameters.artifactName }}/${{ parameters.artifactFile }}"
+        displayName: 'Fastlane distribute_stg (android)'
+        env:
+          FIREBASE_ANDROID_APP_ID_STG: $(FIREBASE_ANDROID_APP_ID_STG)
+          FIREBASE_TOKEN: $(FIREBASE_TOKEN)
+
+  - ${{ if eq(parameters.platform, 'ios') }}:
+      - script: |
+          IPA_FILE=$(find "$(Pipeline.Workspace)/${{ parameters.artifactName }}" -name "*.ipa" | head -1)
+          echo "Found IPA: $IPA_FILE"
+          cd ios && bundle exec fastlane distribute_stg ipa_path:"$IPA_FILE"
+        displayName: 'Fastlane distribute_stg (ios)'
+        env:
+          FIREBASE_IOS_APP_ID_STG: $(FIREBASE_IOS_APP_ID_STG)
+          FIREBASE_TOKEN: $(FIREBASE_TOKEN)

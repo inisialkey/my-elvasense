@@ -1,0 +1,79 @@
+trigger:
+  branches:
+    include:
+      - develop
+
+pr:
+  branches:
+    include:
+      - develop
+      - main
+
+parameters:
+  - name: skipDistribution
+    displayName: 'Skip distribution stage'
+    type: boolean
+    default: false
+
+variables:
+  - group: mobile-common
+  - group: mobile-signing-android
+  - group: mobile-signing-ios
+
+pool:
+  name: $(BUILD_AGENT_POOL)
+
+stages:
+  - stage: Validate
+    displayName: 'Validate (analyze + test)'
+    jobs:
+      - job: analyze_and_test
+        displayName: 'Analyze and Test'
+        steps:
+          - template: azure-pipelines/templates/validate.yml
+
+  - stage: Build
+    displayName: 'Build signed artifacts'
+    dependsOn: Validate
+    condition: |
+      and(
+        succeeded(),
+        ne(variables['Build.Reason'], 'PullRequest')
+      )
+    jobs:
+      - job: build_android
+        displayName: 'Build Android (stg)'
+        steps:
+          - template: azure-pipelines/templates/android-build-stg.yml
+
+      - job: build_ios
+        displayName: 'Build iOS (stg)'
+        steps:
+          - template: azure-pipelines/templates/ios-build-stg.yml
+
+  - stage: Distribute
+    displayName: 'Distribute to Firebase'
+    dependsOn: Build
+    condition: |
+      and(
+        succeeded(),
+        eq('${{ parameters.skipDistribution }}', false)
+      )
+    jobs:
+      - job: distribute_android
+        displayName: 'Distribute Android'
+        steps:
+          - template: azure-pipelines/templates/firebase-distribute.yml
+            parameters:
+              platform: android
+              artifactName: android-stg-aab
+              artifactFile: app-stg-release.aab
+
+      - job: distribute_ios
+        displayName: 'Distribute iOS'
+        steps:
+          - template: azure-pipelines/templates/firebase-distribute.yml
+            parameters:
+              platform: ios
+              artifactName: ios-stg-ipa
+              artifactFile: ''  # iOS uses find/glob — value unused
