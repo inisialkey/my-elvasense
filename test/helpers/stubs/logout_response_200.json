@@ -1,0 +1,16 @@
+{
+    "data": {
+        "id": "12252b24-e68a-41f4-9237-5668296481da",
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX3Nlc3Npb25faWQiOiIxMjI1MmIyNC1lNjhhLTQxZjQtOTIzNy01NjY4Mjk2NDgxZGEiLCJ1c2VyX2FjY291bnRfaWQiOiI5M2YyZjgzOC0xMzEzLTQwNzItYjQ0Ny0zY2ZjNDM2MmI4NjEiLCJpYXQiOjE3NzU0Njc5NTksImV4cCI6MTc3NTQ3MTU1OX0.KtQv9-26EoXPr_BpMcVCiFyVy6A2IoABnT8kiW59zZQ",
+        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX3Nlc3Npb25faWQiOiIxMjI1MmIyNC1lNjhhLTQxZjQtOTIzNy01NjY4Mjk2NDgxZGEiLCJ1c2VyX2FjY291bnRfaWQiOiI5M2YyZjgzOC0xMzEzLTQwNzItYjQ0Ny0zY2ZjNDM2MmI4NjEiLCJpYXQiOjE3NzU0Njc5NTksImV4cCI6MTgwNzAwMzk1OX0.XWHcydpH7A1rFnlK8uyLG2UFw6Da_skbUZqpXyGCnzI",
+        "userAccountId": "93f2f838-1313-4072-b447-3cfc4362b861",
+        "isRefresh": false,
+        "isInactive": false,
+        "refreshAt": "2026-04-06T09:32:39.843Z",
+        "user_session_id": "12252b24-e68a-41f4-9237-5668296481da",
+        "user_account_id": "93f2f838-1313-4072-b447-3cfc4362b861",
+        "iat": 1775467959,
+        "exp": 1775471559
+    },
+    "timestamp": "2026-04-06T09:34:07.305Z"
+}

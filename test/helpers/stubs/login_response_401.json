@@ -1,0 +1,8 @@
+{
+    "message": "jwt error",
+    "details": [
+        "jwt not found"
+    ],
+    "status": 401,
+    "timestamp": "2026-04-10T03:21:22.973Z"
+}

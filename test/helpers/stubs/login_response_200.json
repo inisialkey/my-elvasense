@@ -1,0 +1,10 @@
+{
+    "data": {
+        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX3Nlc3Npb25faWQiOiIxMjI1MmIyNC1lNjhhLTQxZjQtOTIzNy01NjY4Mjk2NDgxZGEiLCJ1c2VyX2FjY291bnRfaWQiOiI5M2YyZjgzOC0xMzEzLTQwNzItYjQ0Ny0zY2ZjNDM2MmI4NjEiLCJpYXQiOjE3NzU0Njc5NTksImV4cCI6MTc3NTQ3MTU1OX0.KtQv9-26EoXPr_BpMcVCiFyVy6A2IoABnT8kiW59zZQ",
+        "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX3Nlc3Npb25faWQiOiIxMjI1MmIyNC1lNjhhLTQxZjQtOTIzNy01NjY4Mjk2NDgxZGEiLCJ1c2VyX2FjY291bnRfaWQiOiI5M2YyZjgzOC0xMzEzLTQwNzItYjQ0Ny0zY2ZjNDM2MmI4NjEiLCJpYXQiOjE3NzU0Njc5NTksImV4cCI6MTgwNzAwMzk1OX0.XWHcydpH7A1rFnlK8uyLG2UFw6Da_skbUZqpXyGCnzI",
+        "access_token_exp": "2026-04-06T10:32:39.822Z",
+        "refresh_token_exp": "2026-04-06T10:32:39.822Z",
+        "session_id": "12252b24-e68a-41f4-9237-5668296481da"
+    },
+    "timestamp": "2026-04-06T09:32:39.846Z"
+}
