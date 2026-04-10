@@ -60,7 +60,6 @@ void _useCase() {
   /// Auth
   sl.registerLazySingleton(() => PostLogin(sl()));
   sl.registerLazySingleton(() => PostLogout(sl()));
-  sl.registerLazySingleton(() => PostRegister(sl()));
 
   /// Users
   sl.registerLazySingleton(() => GetUsers(sl()));
@@ -69,7 +68,6 @@ void _useCase() {
 
 void _cubit() {
   /// Auth
-  sl.registerFactory(() => RegisterCubit(sl()));
   sl.registerFactory(() => AuthCubit(sl()));
   sl.registerFactory(() => LogoutCubit(sl()));
 

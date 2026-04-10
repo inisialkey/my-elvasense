@@ -78,10 +78,7 @@ class AppRoute {
         path: Routes.register.path,
         name: Routes.register.name,
         builder: (_, _) => MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (_) => sl<RegisterCubit>()),
-            BlocProvider(create: (_) => sl<ReloadFormCubit>()),
-          ],
+          providers: [BlocProvider(create: (_) => sl<ReloadFormCubit>())],
           child: const RegisterPage(),
         ),
       ),
