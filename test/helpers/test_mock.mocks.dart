@@ -8,11 +8,17 @@ import 'dart:async' as _i6;
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:flutter/foundation.dart' as _i4;
 import 'package:flutter/src/widgets/framework.dart' as _i3;
-import 'package:flutter/src/widgets/notification_listener.dart' as _i10;
+import 'package:flutter/src/widgets/notification_listener.dart' as _i13;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:myelvasense/core/core.dart' as _i7;
 import 'package:myelvasense/features/auth/auth.dart' as _i5;
 import 'package:myelvasense/features/features.dart' as _i8;
+import 'package:myelvasense/utils/services/permission/app_permission.dart'
+    as _i12;
+import 'package:myelvasense/utils/services/permission/permission_result.dart'
+    as _i11;
+import 'package:myelvasense/utils/services/permission/permission_service.dart'
+    as _i10;
 import 'package:myelvasense/utils/services/secure_storage/auth_token_service.dart'
     as _i9;
 
@@ -269,6 +275,39 @@ class MockAuthTokenService extends _i1.Mock implements _i9.AuthTokenService {
           as _i6.Future<void>);
 }
 
+/// A class which mocks [PermissionService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockPermissionService extends _i1.Mock implements _i10.PermissionService {
+  MockPermissionService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i6.Future<_i11.PermissionResult> checkPermission(
+    _i12.AppPermission? permission,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#checkPermission, [permission]),
+            returnValue: _i6.Future<_i11.PermissionResult>.value(
+              _i11.PermissionResult.granted,
+            ),
+          )
+          as _i6.Future<_i11.PermissionResult>);
+
+  @override
+  _i6.Future<_i11.PermissionResult> requestPermission(
+    _i12.AppPermission? permission,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#requestPermission, [permission]),
+            returnValue: _i6.Future<_i11.PermissionResult>.value(
+              _i11.PermissionResult.granted,
+            ),
+          )
+          as _i6.Future<_i11.PermissionResult>);
+}
+
 /// A class which mocks [BuildContext].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -347,7 +386,7 @@ class MockBuildContext extends _i1.Mock implements _i3.BuildContext {
   );
 
   @override
-  void dispatchNotification(_i10.Notification? notification) =>
+  void dispatchNotification(_i13.Notification? notification) =>
       super.noSuchMethod(
         Invocation.method(#dispatchNotification, [notification]),
         returnValueForMissingStub: null,

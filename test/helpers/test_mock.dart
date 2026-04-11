@@ -9,6 +9,7 @@ import 'package:myelvasense/utils/utils.dart';
   UsersRepository,
   UsersRemoteDatasource,
   AuthTokenService,
+  PermissionService,
 ])
 @GenerateNiceMocks([MockSpec<BuildContext>()])
 void main() {}
