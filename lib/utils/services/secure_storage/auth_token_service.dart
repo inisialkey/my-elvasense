@@ -25,8 +25,8 @@ class AuthTokenService {
 
   Future<String?> getRefreshToken() => _storage.read(key: _refreshTokenKey);
 
-  Future<void> clearTokens() async {
-    await _storage.delete(key: _accessTokenKey);
-    await _storage.delete(key: _refreshTokenKey);
-  }
+  Future<void> clearTokens() => Future.wait([
+        _storage.delete(key: _accessTokenKey),
+        _storage.delete(key: _refreshTokenKey),
+      ]);
 }
