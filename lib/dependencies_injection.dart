@@ -49,7 +49,7 @@ Future<void> _initHiveBoxes({
 
 void _repositories() {
   sl.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(sl(), sl()),
+    () => AuthRepositoryImpl(sl(), sl(), sl()),
   );
   sl.registerLazySingleton<UsersRepository>(() => UsersRepositoryImpl(sl()));
 }

@@ -10,8 +10,7 @@ import 'package:myelvasense/features/auth/auth.dart';
 import 'package:myelvasense/utils/utils.dart';
 
 // coverage:ignore-start
-class DioInterceptor extends Interceptor
-    with FirebaseCrashLogger, MainBoxMixin {
+class DioInterceptor extends Interceptor with FirebaseCrashLogger {
   /// Completer-based lock: only the first 401 triggers a refresh.
   /// Subsequent 401s await this Completer's future.
   static Completer<bool>? _refreshCompleter;
@@ -83,8 +82,12 @@ class DioInterceptor extends Interceptor
     );
 
     // No refresh token stored — session is invalid
-    if (getData(MainBoxKeys.refreshToken) == null) {
-      await logoutBox();
+    final storedRefreshToken =
+        sl.isRegistered<AuthTokenService>()
+            ? await sl<AuthTokenService>().getRefreshToken()
+            : null;
+    if (storedRefreshToken == null) {
+      await MainBoxMixin().logoutBox();
       _showSessionExpiredDialog();
       return handler.reject(sessionExpiredException);
     }
@@ -113,20 +116,26 @@ class DioInterceptor extends Interceptor
     } catch (e) {
       _refreshCompleter!.complete(false);
       _refreshCompleter = null;
-      await logoutBox();
+      await MainBoxMixin().logoutBox();
       _showSessionExpiredDialog();
       return handler.reject(sessionExpiredException);
     }
   }
 
-  Future<Response<dynamic>> _retry(RequestOptions requestOptions) {
-    final newToken = getData(MainBoxKeys.accessToken);
+  Future<Response<dynamic>> _retry(RequestOptions requestOptions) async {
+    final newToken =
+        sl.isRegistered<AuthTokenService>()
+            ? await sl<AuthTokenService>().getAccessToken()
+            : null;
     final options = Options(
       method: requestOptions.method,
-      headers: {...requestOptions.headers, 'Authorization': 'Bearer $newToken'},
+      headers: {
+        ...requestOptions.headers,
+        if (newToken != null) 'Authorization': 'Bearer $newToken',
+      },
     );
 
-    // Use the DioClient singleton — its dio getter reads the fresh token from Hive
+    // Use the DioClient singleton — its dio getter reads the fresh token from secure storage
     return sl<DioClient>().dio.request<dynamic>(
       requestOptions.path,
       data: requestOptions.data,
@@ -141,13 +150,17 @@ class DioInterceptor extends Interceptor
   Future<bool> _refreshToken() async {
     try {
       const baseUrl = String.fromEnvironment('BASE_URL');
+      final refreshToken =
+          sl.isRegistered<AuthTokenService>()
+              ? await sl<AuthTokenService>().getRefreshToken()
+              : null;
       final rawDio = Dio(
         BaseOptions(
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'x-api-key': const String.fromEnvironment('API_KEY'),
-            'Authorization': 'Bearer ${getData(MainBoxKeys.refreshToken)}',
+            if (refreshToken != null) 'Authorization': 'Bearer $refreshToken',
           },
           receiveTimeout: const Duration(minutes: 1),
           connectTimeout: const Duration(minutes: 1),
@@ -168,15 +181,19 @@ class DioInterceptor extends Interceptor
       final data = loginResponse.data;
 
       if (data?.accessToken == null || data?.refreshToken == null) {
-        await logoutBox();
+        await MainBoxMixin().logoutBox();
         return false;
       }
 
-      await addData(MainBoxKeys.refreshToken, data!.refreshToken);
-      await addData(MainBoxKeys.accessToken, data.accessToken);
+      if (sl.isRegistered<AuthTokenService>()) {
+        await sl<AuthTokenService>().saveTokens(
+          accessToken: data?.accessToken,
+          refreshToken: data?.refreshToken,
+        );
+      }
       return true;
     } catch (_) {
-      await logoutBox();
+      await MainBoxMixin().logoutBox();
       return false;
     }
   }
@@ -197,7 +214,7 @@ class DioInterceptor extends Interceptor
             TextButton(
               onPressed: () {
                 context.pop();
-                logoutBox();
+                MainBoxMixin().logoutBox();
                 context.goNamed(Routes.root.name);
               },
               child: const Text('OK'),

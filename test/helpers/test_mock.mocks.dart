@@ -8,11 +8,13 @@ import 'dart:async' as _i6;
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:flutter/foundation.dart' as _i4;
 import 'package:flutter/src/widgets/framework.dart' as _i3;
-import 'package:flutter/src/widgets/notification_listener.dart' as _i9;
+import 'package:flutter/src/widgets/notification_listener.dart' as _i10;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:myelvasense/core/core.dart' as _i7;
 import 'package:myelvasense/features/auth/auth.dart' as _i5;
 import 'package:myelvasense/features/features.dart' as _i8;
+import 'package:myelvasense/utils/services/secure_storage/auth_token_service.dart'
+    as _i9;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -221,6 +223,55 @@ class MockUsersRemoteDatasource extends _i1.Mock
           as _i6.Future<_i2.Either<_i7.Failure, _i8.UserResponse>>);
 }
 
+/// A class which mocks [AuthTokenService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAuthTokenService extends _i1.Mock implements _i9.AuthTokenService {
+  MockAuthTokenService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i6.Future<void> saveTokens({
+    required String? accessToken,
+    required String? refreshToken,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#saveTokens, [], {
+              #accessToken: accessToken,
+              #refreshToken: refreshToken,
+            }),
+            returnValue: _i6.Future<void>.value(),
+            returnValueForMissingStub: _i6.Future<void>.value(),
+          )
+          as _i6.Future<void>);
+
+  @override
+  _i6.Future<String?> getAccessToken() =>
+      (super.noSuchMethod(
+            Invocation.method(#getAccessToken, []),
+            returnValue: _i6.Future<String?>.value(),
+          )
+          as _i6.Future<String?>);
+
+  @override
+  _i6.Future<String?> getRefreshToken() =>
+      (super.noSuchMethod(
+            Invocation.method(#getRefreshToken, []),
+            returnValue: _i6.Future<String?>.value(),
+          )
+          as _i6.Future<String?>);
+
+  @override
+  _i6.Future<void> clearTokens() =>
+      (super.noSuchMethod(
+            Invocation.method(#clearTokens, []),
+            returnValue: _i6.Future<void>.value(),
+            returnValueForMissingStub: _i6.Future<void>.value(),
+          )
+          as _i6.Future<void>);
+}
+
 /// A class which mocks [BuildContext].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -299,7 +350,7 @@ class MockBuildContext extends _i1.Mock implements _i3.BuildContext {
   );
 
   @override
-  void dispatchNotification(_i9.Notification? notification) =>
+  void dispatchNotification(_i10.Notification? notification) =>
       super.noSuchMethod(
         Invocation.method(#dispatchNotification, [notification]),
         returnValueForMissingStub: null,
