@@ -16,7 +16,10 @@ class DioInterceptor extends Interceptor with FirebaseCrashLogger {
   static Completer<bool>? _refreshCompleter;
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+  Future<void> onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     // Check connectivity before proceeding
     if (sl.isRegistered<ConnectivityService>() &&
         !sl<ConnectivityService>().isConnected) {
@@ -27,6 +30,11 @@ class DioInterceptor extends Interceptor with FirebaseCrashLogger {
           message: 'No internet connection',
         ),
       );
+    }
+
+    final token = await sl<AuthTokenService>().getAccessToken();
+    if (token != null) {
+      options.headers['Authorization'] = 'Bearer $token';
     }
 
     String headerMessage = '';
@@ -82,12 +90,9 @@ class DioInterceptor extends Interceptor with FirebaseCrashLogger {
     );
 
     // No refresh token stored — session is invalid
-    final storedRefreshToken =
-        sl.isRegistered<AuthTokenService>()
-            ? await sl<AuthTokenService>().getRefreshToken()
-            : null;
-    if (storedRefreshToken == null) {
-      await MainBoxMixin().logoutBox();
+    if (await sl<AuthTokenService>().getRefreshToken() == null) {
+      await sl<MainBoxMixin>().logoutBox();
+      await sl<AuthTokenService>().clearTokens();
       _showSessionExpiredDialog();
       return handler.reject(sessionExpiredException);
     }
@@ -116,17 +121,15 @@ class DioInterceptor extends Interceptor with FirebaseCrashLogger {
     } catch (e) {
       _refreshCompleter!.complete(false);
       _refreshCompleter = null;
-      await MainBoxMixin().logoutBox();
+      await sl<MainBoxMixin>().logoutBox();
+      await sl<AuthTokenService>().clearTokens();
       _showSessionExpiredDialog();
       return handler.reject(sessionExpiredException);
     }
   }
 
   Future<Response<dynamic>> _retry(RequestOptions requestOptions) async {
-    final newToken =
-        sl.isRegistered<AuthTokenService>()
-            ? await sl<AuthTokenService>().getAccessToken()
-            : null;
+    final newToken = await sl<AuthTokenService>().getAccessToken();
     final options = Options(
       method: requestOptions.method,
       headers: {
@@ -135,7 +138,6 @@ class DioInterceptor extends Interceptor with FirebaseCrashLogger {
       },
     );
 
-    // Use the DioClient singleton — its dio getter reads the fresh token from secure storage
     return sl<DioClient>().dio.request<dynamic>(
       requestOptions.path,
       data: requestOptions.data,
@@ -150,17 +152,15 @@ class DioInterceptor extends Interceptor with FirebaseCrashLogger {
   Future<bool> _refreshToken() async {
     try {
       const baseUrl = String.fromEnvironment('BASE_URL');
-      final refreshToken =
-          sl.isRegistered<AuthTokenService>()
-              ? await sl<AuthTokenService>().getRefreshToken()
-              : null;
+      final currentRefreshToken =
+          await sl<AuthTokenService>().getRefreshToken();
       final rawDio = Dio(
         BaseOptions(
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'x-api-key': const String.fromEnvironment('API_KEY'),
-            if (refreshToken != null) 'Authorization': 'Bearer $refreshToken',
+            'Authorization': 'Bearer $currentRefreshToken',
           },
           receiveTimeout: const Duration(minutes: 1),
           connectTimeout: const Duration(minutes: 1),
@@ -181,19 +181,19 @@ class DioInterceptor extends Interceptor with FirebaseCrashLogger {
       final data = loginResponse.data;
 
       if (data?.accessToken == null || data?.refreshToken == null) {
-        await MainBoxMixin().logoutBox();
+        await sl<MainBoxMixin>().logoutBox();
+        await sl<AuthTokenService>().clearTokens();
         return false;
       }
 
-      if (sl.isRegistered<AuthTokenService>()) {
-        await sl<AuthTokenService>().saveTokens(
-          accessToken: data?.accessToken,
-          refreshToken: data?.refreshToken,
-        );
-      }
+      await sl<AuthTokenService>().saveTokens(
+        accessToken: data!.accessToken,
+        refreshToken: data.refreshToken,
+      );
       return true;
     } catch (_) {
-      await MainBoxMixin().logoutBox();
+      await sl<MainBoxMixin>().logoutBox();
+      await sl<AuthTokenService>().clearTokens();
       return false;
     }
   }
@@ -214,7 +214,8 @@ class DioInterceptor extends Interceptor with FirebaseCrashLogger {
             TextButton(
               onPressed: () {
                 context.pop();
-                MainBoxMixin().logoutBox();
+                sl<MainBoxMixin>().logoutBox();
+                sl<AuthTokenService>().clearTokens();
                 context.goNamed(Routes.root.name);
               },
               child: const Text('OK'),
