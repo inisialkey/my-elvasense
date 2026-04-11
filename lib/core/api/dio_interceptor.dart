@@ -38,7 +38,10 @@ class DioInterceptor extends Interceptor with FirebaseCrashLogger {
     }
 
     String headerMessage = '';
-    options.headers.forEach((k, v) => headerMessage += '► $k: $v\n');
+    options.headers.forEach((k, v) {
+      final display = k.toLowerCase() == 'authorization' ? '[REDACTED]' : v;
+      headerMessage += '► $k: $display\n';
+    });
 
     try {
       options.queryParameters.forEach((k, v) => debugPrint('► $k: $v'));
@@ -212,11 +215,13 @@ class DioInterceptor extends Interceptor with FirebaseCrashLogger {
           content: const Text('Your session has expired. Please log in again.'),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 context.pop();
-                sl<MainBoxMixin>().logoutBox();
-                sl<AuthTokenService>().clearTokens();
-                context.goNamed(Routes.root.name);
+                await Future.wait([
+                  sl<MainBoxMixin>().logoutBox(),
+                  sl<AuthTokenService>().clearTokens(),
+                ]);
+                if (context.mounted) context.goNamed(Routes.root.name);
               },
               child: const Text('OK'),
             ),

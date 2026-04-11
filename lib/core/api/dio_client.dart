@@ -27,11 +27,7 @@ class DioClient with FirebaseCrashLogger {
     } else {
       /// We need to recreate dio to avoid token issue after login
       final dio = _createDio();
-
-      if (!_isUnitTest) {
-        dio.interceptors.add(DioInterceptor());
-      }
-
+      dio.interceptors.add(DioInterceptor());
       return dio;
     }
   }

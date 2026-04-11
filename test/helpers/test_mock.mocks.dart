@@ -232,10 +232,7 @@ class MockAuthTokenService extends _i1.Mock implements _i9.AuthTokenService {
   }
 
   @override
-  _i6.Future<void> saveTokens({
-    required String? accessToken,
-    required String? refreshToken,
-  }) =>
+  _i6.Future<void> saveTokens({String? accessToken, String? refreshToken}) =>
       (super.noSuchMethod(
             Invocation.method(#saveTokens, [], {
               #accessToken: accessToken,

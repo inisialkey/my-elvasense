@@ -38,11 +38,11 @@ Future<void> _initHiveBoxes({
 }) async {
   await MainBoxMixin.initHive(prefixBox);
 
-  // One-time migration: clear legacy token keys from Hive and force re-login.
-  // Safe to run on every startup — once keys are gone they become no-ops.
+  // One-time migration: clear legacy token keys from Hive.
+  // Safe to run on every startup — once keys are gone these become no-ops.
+  // isLogin is intentionally NOT deleted here; it remains the auth state flag.
   MainBoxMixin.mainBox?.delete('accessToken');
   MainBoxMixin.mainBox?.delete('refreshToken');
-  MainBoxMixin.mainBox?.delete('isLogin');
 
   sl.registerSingleton<MainBoxMixin>(MainBoxMixin());
 }

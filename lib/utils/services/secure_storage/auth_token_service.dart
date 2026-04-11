@@ -9,17 +9,16 @@ class AuthTokenService {
   static const _accessTokenKey = 'secure_access_token';
   static const _refreshTokenKey = 'secure_refresh_token';
 
+  /// Writes [accessToken] and [refreshToken] to secure storage in parallel.
+  /// Passing null clears the corresponding key (flutter_secure_storage
+  /// treats write(value: null) as a delete).
   Future<void> saveTokens({
-    required String? accessToken,
-    required String? refreshToken,
-  }) async {
-    if (accessToken != null) {
-      await _storage.write(key: _accessTokenKey, value: accessToken);
-    }
-    if (refreshToken != null) {
-      await _storage.write(key: _refreshTokenKey, value: refreshToken);
-    }
-  }
+    String? accessToken,
+    String? refreshToken,
+  }) => Future.wait([
+        _storage.write(key: _accessTokenKey, value: accessToken),
+        _storage.write(key: _refreshTokenKey, value: refreshToken),
+      ]);
 
   Future<String?> getAccessToken() => _storage.read(key: _accessTokenKey);
 
