@@ -74,6 +74,7 @@ void _useCase() {
 void _cubit() {
   sl.registerFactory(() => AuthCubit(sl()));
   sl.registerFactory(() => LogoutCubit(sl()));
+  sl.registerFactory(() => PermissionCubit(sl()));
   sl.registerFactory(() => ReloadFormCubit());
 
   if (sl.isRegistered<ConnectivityService>()) {
