@@ -32,6 +32,8 @@ dependencies:
   hive_ce: ^2.12.0
   hive_ce_flutter: ^2.3.2
 
+  flutter_secure_storage: ^9.2.4
+
   # Use for Dependencies Injection
   get_it: ^8.2.0
 
