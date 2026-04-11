@@ -154,3 +154,6 @@ docs/superpowers/
 **/fastlane/screenshots/**/*.png
 **/fastlane/test_output
 **/fastlane/README.md
+
+# Documentation
+.docs/
