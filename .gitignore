@@ -157,3 +157,6 @@ docs/superpowers/
 
 # Documentation
 .docs/
+
+# Git worktrees
+.worktrees/
