@@ -34,13 +34,17 @@ class PermissionServiceImpl implements PermissionService {
 
   @override
   Future<PermissionResult> checkPermission(AppPermission permission) async {
-    final status = await _permissionMap[permission]!.status;
+    final nativePermission = _permissionMap[permission];
+    assert(nativePermission != null, 'Add $permission to _permissionMap');
+    final status = await nativePermission!.status;
     return _mapStatus(status);
   }
 
   @override
   Future<PermissionResult> requestPermission(AppPermission permission) async {
-    final status = await _permissionMap[permission]!.request();
+    final nativePermission = _permissionMap[permission];
+    assert(nativePermission != null, 'Add $permission to _permissionMap');
+    final status = await nativePermission!.request();
     return _mapStatus(status);
   }
 
@@ -50,6 +54,6 @@ class PermissionServiceImpl implements PermissionService {
         PermissionStatus.permanentlyDenied => PermissionResult.permanentlyDenied,
         PermissionStatus.restricted => PermissionResult.restricted,
         PermissionStatus.limited => PermissionResult.limited,
-        _ => PermissionResult.denied,
+        PermissionStatus.provisional => PermissionResult.provisional,
       };
 }

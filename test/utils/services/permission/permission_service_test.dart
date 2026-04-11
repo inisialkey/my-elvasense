@@ -85,6 +85,14 @@ void main() {
         PermissionResult.limited,
       );
     });
+
+    test('returns provisional when OS status is provisional', () async {
+      _mockPermissionChannel(PermissionStatus.provisional);
+      expect(
+        await service.checkPermission(AppPermission.notification),
+        PermissionResult.provisional,
+      );
+    });
   });
 
   group('requestPermission', () {
@@ -109,6 +117,30 @@ void main() {
       expect(
         await service.requestPermission(AppPermission.location),
         PermissionResult.denied,
+      );
+    });
+
+    test('returns restricted when OS returns restricted', () async {
+      _mockPermissionChannel(PermissionStatus.restricted);
+      expect(
+        await service.requestPermission(AppPermission.storage),
+        PermissionResult.restricted,
+      );
+    });
+
+    test('returns limited when OS returns limited', () async {
+      _mockPermissionChannel(PermissionStatus.limited);
+      expect(
+        await service.requestPermission(AppPermission.storage),
+        PermissionResult.limited,
+      );
+    });
+
+    test('returns provisional when OS returns provisional', () async {
+      _mockPermissionChannel(PermissionStatus.provisional);
+      expect(
+        await service.requestPermission(AppPermission.notification),
+        PermissionResult.provisional,
       );
     });
   });

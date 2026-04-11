@@ -22,4 +22,8 @@ enum PermissionResult {
   /// Partial access granted (iOS 14+ for photos/contacts).
   /// Proceed with limited capability.
   limited,
+
+  /// iOS 12+ provisional notification permission — quiet/non-interruptive delivery.
+  /// Treat as usable (caller should check and upgrade to full permission later).
+  provisional,
 }

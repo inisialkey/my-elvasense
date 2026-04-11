@@ -88,6 +88,19 @@ void main() {
   );
 
   blocTest<PermissionCubit, PermissionState>(
+    'requestNotification emits granted when service returns provisional',
+    build: () {
+      when(
+        mockPermissionService.requestPermission(AppPermission.notification),
+      ).thenAnswer((_) async => PermissionResult.provisional);
+      return PermissionCubit(mockPermissionService);
+    },
+    act: (cubit) => cubit.requestNotification(),
+    // provisional notification is treated as usable — emits granted
+    expect: () => const [PermissionState.granted()],
+  );
+
+  blocTest<PermissionCubit, PermissionState>(
     'checkNotification emits granted when service returns granted',
     build: () {
       when(
@@ -96,6 +109,55 @@ void main() {
       return PermissionCubit(mockPermissionService);
     },
     act: (cubit) => cubit.checkNotification(),
+    expect: () => const [PermissionState.granted()],
+  );
+
+  blocTest<PermissionCubit, PermissionState>(
+    'checkNotification emits denied when service returns denied',
+    build: () {
+      when(
+        mockPermissionService.checkPermission(AppPermission.notification),
+      ).thenAnswer((_) async => PermissionResult.denied);
+      return PermissionCubit(mockPermissionService);
+    },
+    act: (cubit) => cubit.checkNotification(),
+    expect: () => const [PermissionState.denied()],
+  );
+
+  blocTest<PermissionCubit, PermissionState>(
+    'checkNotification emits permanentlyDenied when service returns permanentlyDenied',
+    build: () {
+      when(
+        mockPermissionService.checkPermission(AppPermission.notification),
+      ).thenAnswer((_) async => PermissionResult.permanentlyDenied);
+      return PermissionCubit(mockPermissionService);
+    },
+    act: (cubit) => cubit.checkNotification(),
+    expect: () => const [PermissionState.permanentlyDenied()],
+  );
+
+  blocTest<PermissionCubit, PermissionState>(
+    'checkNotification emits restricted when service returns restricted',
+    build: () {
+      when(
+        mockPermissionService.checkPermission(AppPermission.notification),
+      ).thenAnswer((_) async => PermissionResult.restricted);
+      return PermissionCubit(mockPermissionService);
+    },
+    act: (cubit) => cubit.checkNotification(),
+    expect: () => const [PermissionState.restricted()],
+  );
+
+  blocTest<PermissionCubit, PermissionState>(
+    'checkNotification emits granted when service returns provisional',
+    build: () {
+      when(
+        mockPermissionService.checkPermission(AppPermission.notification),
+      ).thenAnswer((_) async => PermissionResult.provisional);
+      return PermissionCubit(mockPermissionService);
+    },
+    act: (cubit) => cubit.checkNotification(),
+    // provisional is treated as usable — emits granted
     expect: () => const [PermissionState.granted()],
   );
 }

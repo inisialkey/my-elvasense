@@ -19,7 +19,7 @@ Future<void> serviceLocator({
   }
 
   sl.registerLazySingleton<AuthTokenService>(() => AuthTokenService());
-  sl.registerLazySingleton<PermissionService>(() => PermissionServiceImpl());
+  sl.registerSingleton<PermissionService>(PermissionServiceImpl());
 
   sl.registerSingleton<DioClient>(DioClient(isUnitTest: isUnitTest));
 

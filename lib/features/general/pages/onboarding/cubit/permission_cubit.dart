@@ -36,6 +36,7 @@ class PermissionCubit extends Cubit<PermissionState> {
     switch (result) {
       case PermissionResult.granted:
       case PermissionResult.limited:
+      case PermissionResult.provisional:
         emit(const PermissionState.granted());
       case PermissionResult.denied:
         emit(const PermissionState.denied());

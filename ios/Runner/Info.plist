@@ -61,5 +61,7 @@
 		<string>Used to save and load images from your photo library.</string>
 		<key>NSPhotoLibraryAddUsageDescription</key>
 		<string>Used to save photos to your photo library.</string>
+		<key>NSUserNotificationsUsageDescription</key>
+		<string>Used to send you health reminders and important updates.</string>
 	</dict>
 </plist>
