@@ -84,7 +84,7 @@ void main() {
     expect(
       find.byWidgetPredicate((widget) {
         if (widget is Image) {
-          return widget.image == AssetImage(Images.icLauncher);
+          return widget.image == AssetImage(Images.icLogo);
         }
         return false;
       }),
@@ -98,7 +98,7 @@ void main() {
     expect(
       find.byWidgetPredicate((widget) {
         if (widget is Image) {
-          return widget.image == AssetImage(Images.icLauncherDark);
+          return widget.image == AssetImage(Images.icLogo);
         }
         return false;
       }),

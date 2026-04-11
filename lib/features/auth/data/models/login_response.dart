@@ -6,6 +6,7 @@ part 'login_response.g.dart';
 
 @freezed
 sealed class LoginResponse with _$LoginResponse {
+  @JsonSerializable(explicitToJson: true)
   const factory LoginResponse({@JsonKey(name: 'data') DataLogin? data}) =
       _LoginResponse;
 
