@@ -57,6 +57,9 @@ dependencies:
   # Connectivity
   connectivity_plus: ^6.1.4
 
+  # Secure storage for tokens
+  flutter_secure_storage: ^9.2.4
+
   # router
   go_router: ^16.2.1
 
