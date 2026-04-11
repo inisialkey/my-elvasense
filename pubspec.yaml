@@ -34,6 +34,9 @@ dependencies:
 
   flutter_secure_storage: ^9.2.4
 
+  # Permission handling
+  permission_handler: ^11.3.1
+
   # Use for Dependencies Injection
   get_it: ^8.2.0
 

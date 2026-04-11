@@ -53,5 +53,13 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>NSCameraUsageDescription</key>
+		<string>Used to scan QR codes and take photos.</string>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>Used to show your location on the map.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>Used to save and load images from your photo library.</string>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>Used to save photos to your photo library.</string>
 	</dict>
 </plist>
