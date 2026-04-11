@@ -10,21 +10,21 @@ import 'package:permission_handler/permission_handler.dart';
 void _mockPermissionChannel(PermissionStatus status) {
   TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
       .setMockMethodCallHandler(
-    const MethodChannel('flutter.baseflow.com/permissions/methods'),
-    (MethodCall call) async {
-      switch (call.method) {
-        case 'checkPermissionStatus':
-          return status.index;
-        case 'requestPermissions':
-          final permissions = call.arguments as List<dynamic>;
-          return <int, int>{
-            for (final p in permissions) p as int: status.index,
-          };
-        default:
-          return null;
-      }
-    },
-  );
+        const MethodChannel('flutter.baseflow.com/permissions/methods'),
+        (MethodCall call) async {
+          switch (call.method) {
+            case 'checkPermissionStatus':
+              return status.index;
+            case 'requestPermissions':
+              final permissions = call.arguments as List<dynamic>;
+              return <int, int>{
+                for (final p in permissions) p as int: status.index,
+              };
+            default:
+              return null;
+          }
+        },
+      );
 }
 
 void main() {
@@ -39,9 +39,9 @@ void main() {
   tearDown(() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(
-      const MethodChannel('flutter.baseflow.com/permissions/methods'),
-      null,
-    );
+          const MethodChannel('flutter.baseflow.com/permissions/methods'),
+          null,
+        );
   });
 
   group('checkPermission', () {
@@ -61,14 +61,16 @@ void main() {
       );
     });
 
-    test('returns permanentlyDenied when OS status is permanentlyDenied',
-        () async {
-      _mockPermissionChannel(PermissionStatus.permanentlyDenied);
-      expect(
-        await service.checkPermission(AppPermission.notification),
-        PermissionResult.permanentlyDenied,
-      );
-    });
+    test(
+      'returns permanentlyDenied when OS status is permanentlyDenied',
+      () async {
+        _mockPermissionChannel(PermissionStatus.permanentlyDenied);
+        expect(
+          await service.checkPermission(AppPermission.notification),
+          PermissionResult.permanentlyDenied,
+        );
+      },
+    );
 
     test('returns restricted when OS status is restricted', () async {
       _mockPermissionChannel(PermissionStatus.restricted);
@@ -146,13 +148,10 @@ void main() {
   });
 
   group('all AppPermission values are mapped', () {
-    test('no AppPermission value throws on checkPermission', () async {
+    test('no AppPermission value throws on checkPermission', () {
       _mockPermissionChannel(PermissionStatus.granted);
       for (final permission in AppPermission.values) {
-        expect(
-          () => service.checkPermission(permission),
-          returnsNormally,
-        );
+        expect(() => service.checkPermission(permission), returnsNormally);
       }
     });
   });

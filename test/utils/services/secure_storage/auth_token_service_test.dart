@@ -30,19 +30,13 @@ void main() {
     });
 
     test('does not write null accessToken', () async {
-      await authTokenService.saveTokens(
-        accessToken: null,
-        refreshToken: 'refresh456',
-      );
+      await authTokenService.saveTokens(refreshToken: 'refresh456');
 
       expect(await authTokenService.getAccessToken(), isNull);
     });
 
     test('does not write null refreshToken', () async {
-      await authTokenService.saveTokens(
-        accessToken: 'access123',
-        refreshToken: null,
-      );
+      await authTokenService.saveTokens(accessToken: 'access123');
 
       expect(await authTokenService.getRefreshToken(), isNull);
     });
@@ -54,10 +48,7 @@ void main() {
     });
 
     test('returns stored value after save', () async {
-      await authTokenService.saveTokens(
-        accessToken: 'mytoken',
-        refreshToken: null,
-      );
+      await authTokenService.saveTokens(accessToken: 'mytoken');
 
       expect(await authTokenService.getAccessToken(), 'mytoken');
     });
@@ -69,10 +60,7 @@ void main() {
     });
 
     test('returns stored value after save', () async {
-      await authTokenService.saveTokens(
-        accessToken: null,
-        refreshToken: 'myrefresh',
-      );
+      await authTokenService.saveTokens(refreshToken: 'myrefresh');
 
       expect(await authTokenService.getRefreshToken(), 'myrefresh');
     });
