@@ -10,14 +10,16 @@ import 'package:myelvasense/features/auth/auth.dart';
 import 'package:myelvasense/utils/utils.dart';
 
 // coverage:ignore-start
-class DioInterceptor extends Interceptor
-    with FirebaseCrashLogger, MainBoxMixin {
+class DioInterceptor extends Interceptor with FirebaseCrashLogger {
   /// Completer-based lock: only the first 401 triggers a refresh.
   /// Subsequent 401s await this Completer's future.
   static Completer<bool>? _refreshCompleter;
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+  Future<void> onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     // Check connectivity before proceeding
     if (sl.isRegistered<ConnectivityService>() &&
         !sl<ConnectivityService>().isConnected) {
@@ -30,8 +32,16 @@ class DioInterceptor extends Interceptor
       );
     }
 
+    final token = await sl<AuthTokenService>().getAccessToken();
+    if (token != null) {
+      options.headers['Authorization'] = 'Bearer $token';
+    }
+
     String headerMessage = '';
-    options.headers.forEach((k, v) => headerMessage += '► $k: $v\n');
+    options.headers.forEach((k, v) {
+      final display = k.toLowerCase() == 'authorization' ? '[REDACTED]' : v;
+      headerMessage += '► $k: $display\n';
+    });
 
     try {
       options.queryParameters.forEach((k, v) => debugPrint('► $k: $v'));
@@ -83,8 +93,9 @@ class DioInterceptor extends Interceptor
     );
 
     // No refresh token stored — session is invalid
-    if (getData(MainBoxKeys.refreshToken) == null) {
-      await logoutBox();
+    if (await sl<AuthTokenService>().getRefreshToken() == null) {
+      await sl<MainBoxMixin>().logoutBox();
+      await sl<AuthTokenService>().clearTokens();
       _showSessionExpiredDialog();
       return handler.reject(sessionExpiredException);
     }
@@ -113,20 +124,23 @@ class DioInterceptor extends Interceptor
     } catch (e) {
       _refreshCompleter!.complete(false);
       _refreshCompleter = null;
-      await logoutBox();
+      await sl<MainBoxMixin>().logoutBox();
+      await sl<AuthTokenService>().clearTokens();
       _showSessionExpiredDialog();
       return handler.reject(sessionExpiredException);
     }
   }
 
-  Future<Response<dynamic>> _retry(RequestOptions requestOptions) {
-    final newToken = getData(MainBoxKeys.accessToken);
+  Future<Response<dynamic>> _retry(RequestOptions requestOptions) async {
+    final newToken = await sl<AuthTokenService>().getAccessToken();
     final options = Options(
       method: requestOptions.method,
-      headers: {...requestOptions.headers, 'Authorization': 'Bearer $newToken'},
+      headers: {
+        ...requestOptions.headers,
+        if (newToken != null) 'Authorization': 'Bearer $newToken',
+      },
     );
 
-    // Use the DioClient singleton — its dio getter reads the fresh token from Hive
     return sl<DioClient>().dio.request<dynamic>(
       requestOptions.path,
       data: requestOptions.data,
@@ -141,13 +155,15 @@ class DioInterceptor extends Interceptor
   Future<bool> _refreshToken() async {
     try {
       const baseUrl = String.fromEnvironment('BASE_URL');
+      final currentRefreshToken =
+          await sl<AuthTokenService>().getRefreshToken();
       final rawDio = Dio(
         BaseOptions(
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'x-api-key': const String.fromEnvironment('API_KEY'),
-            'Authorization': 'Bearer ${getData(MainBoxKeys.refreshToken)}',
+            'Authorization': 'Bearer $currentRefreshToken',
           },
           receiveTimeout: const Duration(minutes: 1),
           connectTimeout: const Duration(minutes: 1),
@@ -168,15 +184,19 @@ class DioInterceptor extends Interceptor
       final data = loginResponse.data;
 
       if (data?.accessToken == null || data?.refreshToken == null) {
-        await logoutBox();
+        await sl<MainBoxMixin>().logoutBox();
+        await sl<AuthTokenService>().clearTokens();
         return false;
       }
 
-      await addData(MainBoxKeys.refreshToken, data!.refreshToken);
-      await addData(MainBoxKeys.accessToken, data.accessToken);
+      await sl<AuthTokenService>().saveTokens(
+        accessToken: data!.accessToken,
+        refreshToken: data.refreshToken,
+      );
       return true;
     } catch (_) {
-      await logoutBox();
+      await sl<MainBoxMixin>().logoutBox();
+      await sl<AuthTokenService>().clearTokens();
       return false;
     }
   }
@@ -195,10 +215,13 @@ class DioInterceptor extends Interceptor
           content: const Text('Your session has expired. Please log in again.'),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 context.pop();
-                logoutBox();
-                context.goNamed(Routes.root.name);
+                await Future.wait([
+                  sl<MainBoxMixin>().logoutBox(),
+                  sl<AuthTokenService>().clearTokens(),
+                ]);
+                if (context.mounted) context.goNamed(Routes.root.name);
               },
               child: const Text('OK'),
             ),

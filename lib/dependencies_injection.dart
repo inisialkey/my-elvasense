@@ -10,7 +10,6 @@ Future<void> serviceLocator({
   bool isHiveEnable = true,
   String prefixBox = '',
 }) async {
-  /// For unit testing only
   if (isUnitTest) {
     await sl.reset();
   }
@@ -18,6 +17,9 @@ Future<void> serviceLocator({
   if (isHiveEnable) {
     await _initHiveBoxes(isUnitTest: isUnitTest, prefixBox: prefixBox);
   }
+
+  sl.registerLazySingleton<AuthTokenService>(() => AuthTokenService());
+
   sl.registerSingleton<DioClient>(DioClient(isUnitTest: isUnitTest));
 
   if (!isUnitTest) {
@@ -35,18 +37,23 @@ Future<void> _initHiveBoxes({
   String prefixBox = '',
 }) async {
   await MainBoxMixin.initHive(prefixBox);
+
+  // One-time migration: clear legacy token keys from Hive.
+  // Safe to run on every startup — once keys are gone these become no-ops.
+  // isLogin is intentionally NOT deleted here; it remains the auth state flag.
+  MainBoxMixin.mainBox?.delete('accessToken');
+  MainBoxMixin.mainBox?.delete('refreshToken');
+
   sl.registerSingleton<MainBoxMixin>(MainBoxMixin());
 }
 
-/// Register repositories
 void _repositories() {
   sl.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(sl(), sl()),
+    () => AuthRepositoryImpl(sl(), sl(), sl()),
   );
   sl.registerLazySingleton<UsersRepository>(() => UsersRepositoryImpl(sl()));
 }
 
-/// Register dataSources
 void _dataSources() {
   sl.registerLazySingleton<AuthRemoteDatasource>(
     () => AuthRemoteDatasourceImpl(sl()),
@@ -57,29 +64,21 @@ void _dataSources() {
 }
 
 void _useCase() {
-  /// Auth
   sl.registerLazySingleton(() => PostLogin(sl()));
   sl.registerLazySingleton(() => PostLogout(sl()));
-
-  /// Users
   sl.registerLazySingleton(() => GetUsers(sl()));
   sl.registerLazySingleton(() => GetUser(sl()));
 }
 
 void _cubit() {
-  /// Auth
   sl.registerFactory(() => AuthCubit(sl()));
   sl.registerFactory(() => LogoutCubit(sl()));
-
-  /// General
   sl.registerFactory(() => ReloadFormCubit());
 
-  /// Connectivity
   if (sl.isRegistered<ConnectivityService>()) {
     sl.registerFactory(() => ConnectivityCubit(sl()));
   }
 
-  /// Users
   sl.registerFactory(() => UserCubit(sl()));
   sl.registerFactory(() => UsersCubit(sl()));
   sl.registerFactory(() => SettingsCubit());

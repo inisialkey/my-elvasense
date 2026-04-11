@@ -12,8 +12,6 @@ enum ActiveTheme {
 }
 
 enum MainBoxKeys {
-  accessToken,
-  refreshToken,
   fcm,
   language,
   theme,
@@ -42,9 +40,6 @@ mixin class MainBoxMixin {
   T getData<T>(MainBoxKeys key) => mainBox?.get(key.name) as T;
 
   Future<void> logoutBox() async {
-    /// Clear the box
     await removeData(MainBoxKeys.isLogin);
-    await removeData(MainBoxKeys.accessToken);
-    await removeData(MainBoxKeys.refreshToken);
   }
 }

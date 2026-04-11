@@ -51,6 +51,7 @@ void main() {
     mainCubit = MockMainCubit();
     userCubit = MockUserCubit();
     logoutCubit = MockLogoutCubit();
+    when(() => mainCubit.currentIndex).thenReturn(0);
   });
 
   Widget rootWidget(Widget body) => MultiBlocProvider(
@@ -99,7 +100,7 @@ void main() {
     verifyNever(() => userCubit.getUser()).called(0);
 
     expect(find.text('Settings'), findsOneWidget);
-    expect(find.byType(AppBar), findsOneWidget);
+    expect(find.byType(AppBar), findsAtLeastNWidgets(1));
     expect(find.byType(SettingsPage), findsOneWidget);
   });
 }

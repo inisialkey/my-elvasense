@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:myelvasense/core/core.dart';
 import 'package:myelvasense/dependencies_injection.dart';
 import 'package:myelvasense/features/features.dart';
-import 'package:myelvasense/utils/services/hive/hive.dart';
+import 'package:myelvasense/utils/utils.dart';
 
 part 'logout_cubit.freezed.dart';
 
@@ -22,7 +22,10 @@ class LogoutCubit extends Cubit<LogoutState> {
         }
       },
       (r) async {
-        await sl<MainBoxMixin>().logoutBox();
+        await Future.wait([
+          sl<MainBoxMixin>().logoutBox(),
+          sl<AuthTokenService>().clearTokens(),
+        ]);
         emit(LogoutStateSuccess(r));
       },
     );

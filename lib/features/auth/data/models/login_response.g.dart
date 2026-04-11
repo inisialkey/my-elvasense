@@ -14,7 +14,7 @@ _LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$LoginResponseToJson(_LoginResponse instance) =>
-    <String, dynamic>{'data': instance.data};
+    <String, dynamic>{'data': instance.data?.toJson()};
 
 _DataLogin _$DataLoginFromJson(Map<String, dynamic> json) => _DataLogin(
   accessToken: json['access_token'] as String?,

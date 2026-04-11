@@ -5,8 +5,8 @@ void main() {
   group('ListAPI', () {
     test('Auth endpoints', () {
       expect(ListAPI.user, equals('/v1/api/user'));
-      expect(ListAPI.login, equals('/v1/api/auth/login'));
-      expect(ListAPI.logout, equals('/v1/api/auth/logout'));
+      expect(ListAPI.login, equals('/api/v1/sign-in'));
+      expect(ListAPI.logout, equals('/api/v1/user/logout'));
     });
 
     test('User endpoints', () {

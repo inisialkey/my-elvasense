@@ -5,20 +5,14 @@ import 'package:myelvasense/utils/utils.dart';
 
 typedef ResponseConverter<T> = T Function(dynamic response);
 
-class DioClient with MainBoxMixin, FirebaseCrashLogger {
+class DioClient with FirebaseCrashLogger {
   String baseUrl = const String.fromEnvironment('BASE_URL');
 
-  String? _token;
   bool _isUnitTest = false;
   late Dio _dio;
 
   DioClient({bool isUnitTest = false}) {
     _isUnitTest = isUnitTest;
-
-    try {
-      _token = token();
-    } catch (_) {}
-
     _dio = _createDio();
 
     if (!_isUnitTest) {
@@ -26,24 +20,14 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
     }
   }
 
-  String token() => getData(MainBoxKeys.accessToken);
-
   Dio get dio {
     if (_isUnitTest) {
       /// Return static dio if is unit test
       return _dio;
     } else {
       /// We need to recreate dio to avoid token issue after login
-      try {
-        _token = token();
-      } catch (_) {}
-
       final dio = _createDio();
-
-      if (!_isUnitTest) {
-        dio.interceptors.add(DioInterceptor());
-      }
-
+      dio.interceptors.add(DioInterceptor());
       return dio;
     }
   }
@@ -55,7 +39,6 @@ class DioClient with MainBoxMixin, FirebaseCrashLogger {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'x-api-key': const String.fromEnvironment('API_KEY'),
-        if (_token != null) ...{'Authorization': 'Bearer $_token'},
       },
       receiveTimeout: const Duration(minutes: 1),
       connectTimeout: const Duration(minutes: 1),
